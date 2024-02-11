@@ -75,6 +75,11 @@ void shoot_bullet() {
 
 }
 
+// Bullet spawn
+void bullet_spawn() {
+    display_image(bullet_x, bullet_y, 5, filled_square);
+}
+
 // void border_collision() {
 
 
