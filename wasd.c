@@ -95,14 +95,6 @@ void spacktryck()
 
 void avfyrametod(int riktning)                                        //metod för att skjuta,       timer för hastighet av skott
 {
-  if (kula[0][0]==NULL)
-  {
-    kula[0][0]=x_mainCharacter;                   //spawnar kulan i spelaren
-    kula[1][0]=y_mainCharacter;
-    kula[2][0]=riktning;
-  }
-  else
-  {
     int i=0;
     while(kula[0][i]!=NULL)
     {
@@ -112,7 +104,7 @@ void avfyrametod(int riktning)                                        //metod f�
     kula[0][i]=x_mainCharacter;                   //spawnar kulan i spelaren
     kula[1][i]=y_mainCharacter;
     kula[2][i]=riktning;
-  }
+  
 }
 
 void kulfärd(int x, int y, int riktning)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
