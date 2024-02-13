@@ -42,49 +42,49 @@ void spacktryck()
     {
         //vänster
         riktninggevär=3;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(4==getsw())
     {
         //upp
         riktninggevär=0;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(2==getsw())
     {
         //höger
         riktninggevär=1;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(1==getsw())
     {
         //ned
         riktninggevär=2;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(12==getsw())
     {
         //vänster-upp
         riktninggevär=7;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(6==getsw())
     {
         //upphöger
         riktninggevär=4;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(3==getsw())
     {
         //ned-höger
         riktninggevär=5;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     if(9==getsw())
     {
         //ned-vänster
         riktninggevär=6;
-        //avfyrametod(riktninggevär)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
     else
     {
@@ -93,7 +93,7 @@ void spacktryck()
 }
 
 
-void avfyrametod(int riktning)                                        //metod för att skjuta,       timer för hastighet av skott
+void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta,       timer för hastighet av skott
 {
     int i=0;
     while(kula[0][i]!=NULL)
@@ -101,8 +101,8 @@ void avfyrametod(int riktning)                                        //metod f�
       i++;
       //tar bara reda på hur mycket kulor som finns
     }
-    kula[0][i]=x_mainCharacter;                   //spawnar kulan i spelaren
-    kula[1][i]=y_mainCharacter;
+    kula[0][i]=x;                   //spawnar kulan i spelaren
+    kula[1][i]=y;
     kula[2][i]=riktning;
   
 }
