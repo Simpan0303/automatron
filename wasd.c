@@ -5,19 +5,19 @@ public int riktninggevär=0;     //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-hö
 
 void knapptryck()
 {
-    if(8==getbtns();
+    if(8==7|getbtns())          //1000 maskas till 1111 
       {
         y_mainCharacter--;//y_mainCharacter går vänster med a
       }
-      if(4==getbtns();
+      if(4==11|getbtns())
       {
         x_mainCharacter++;//x_mainCharacter går upp med w
       }
-      if(2==getbtns();
+      if(2==13|getbtns())
       {
         y_mainCharacter++;//y_mainCharacter går höger med d
       }
-      if(1==getbtns();
+      if(1==15|getbtns())
       {
         x_mainCharacter--;//x_mainCharacter går nedåt med s
       }
