@@ -5,8 +5,11 @@ int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 
 
 /*
+--display--
 bredd: 128
-höjd: 64*/
+höjd: 64
+-----------
+*/
 
 void knapptryck()
 {
