@@ -1,6 +1,7 @@
 public int x_mainCharacter=64;     //fixa till logisk start sen
 public int y_mainCharacter=32;     //fixa till logisk start sen
-public int riktninggevär=0;     //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
+public int riktninggevär=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
+int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 
 
 /*
@@ -87,3 +88,37 @@ void spacktryck()
         //gevär förblir som det var
     }
 }
+
+
+void avfyrametod(int riktning)                                        //metod för att skjuta,       timer för hastighet av skott
+{
+  if (kula[0][0]==NULL)
+  {
+    kula[0][0]=x_mainCharacter;                   //spawnar kulan i spelaren
+    kula[1][0]=y_mainCharacter;
+    kula[2][0]=riktning;
+  }
+  else
+  {
+    int i=0;
+    while(kula[0][i]!=NULL)
+    {
+      i++;
+      //tar bara reda på hur mycket kulor som finns
+    }
+    kula[0][i]=x_mainCharacter;                   //spawnar kulan i spelaren
+    kula[1][i]=y_mainCharacter;
+    kula[2][i]=riktning;
+  }
+}
+
+void kulfärd(int x, int y, int riktning)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
+{
+
+}
+
+
+
+
+
+//det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();
