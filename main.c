@@ -68,6 +68,9 @@ int main(void) {
 	while( 1 )
 	{
 	  labwork(); /* Do lab-specific things again and again */
+
+		// on button press, move main character
+
 	}
 	return 0;
 }
