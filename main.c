@@ -69,7 +69,13 @@ int main(void) {
 	{
 	  labwork(); /* Do lab-specific things again and again */
 
-		// on button press, move main character
+
+		// on button press, move main character right on x axis
+		// use knapptryck() from wasd.c
+		knapptryck();
+
+
+		display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
 
 	}
 	return 0;
