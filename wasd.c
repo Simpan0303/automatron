@@ -1,7 +1,8 @@
 public int x_mainCharacter=64;     //fixa till logisk start sen
 public int y_mainCharacter=32;     //fixa till logisk start sen
 public int riktninggevär=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
-int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
+public int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
+public int fiendekoordinat[2][1];    //fiendes koordinater
 
 
 /*
@@ -130,6 +131,32 @@ void kulfärd(int x, int y, int riktning)                                       
         //inget antar jag, finns för om flera knappar trycks samtidigt
       }
 }
+
+void fiendemanövrering(int fiendenummer)              //flyttar fiende mot spelaren
+{
+  if(fiendekoordinat[0][fiendenummer]>x_mainCharacter)
+  {
+    fiendekoordinat[0][fiendenummer]--;
+  }
+  if(fiendekoordinat[0][fiendenummer]<x_mainCharacter)
+  {
+    fiendekoordinat[0][fiendenummer]++;
+  }
+  if(fiendekoordinat[1][fiendenummer]>y_mainCharacter)
+  {
+    fiendekoordinat[1][fiendenummer]--;
+  }
+  if(fiendekoordinat[1][fiendenummer]<y_mainCharacter)
+  {
+    fiendekoordinat[1][fiendenummer]++;
+  }
+}
+
+void skada()                                        //ska se om spelare och fiender tar skada
+{
+
+}
+
 
 
 
