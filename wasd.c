@@ -109,7 +109,26 @@ void avfyrametod(int riktning,int x,int y)                                      
 
 void kulfärd(int x, int y, int riktning)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
 {
-
+  if(3==riktning || 6==riktning || 7==riktning)          //1000 maskas till 1111 
+      {
+        y--;//y går vänster
+      }
+      if(0==riktning || 4==riktning || 7==riktning)
+      {
+        x++;//x går upp
+      }
+      if(1==riktning || 4==riktning || 5==riktning)
+      {
+        y++;//y går höger
+      }
+      if(2==riktning || 6==riktning || 6==riktning)
+      {
+        x--;//x går nedåt
+      }
+      else
+      {
+        //inget antar jag, finns för om flera knappar trycks samtidigt
+      }
 }
 
 
