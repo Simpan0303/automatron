@@ -9,22 +9,22 @@
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
-#include "mipslab.h"  /* Declatations for these labs */
+#include "functiondefinitions.h"  /* Declarations for functions */
 
 extern const uint8_t filled_square[][5];
 
+
+
+
+
 int main(void) {
+
+
         /*
 	  This will set the peripheral bus clock to the same frequency
 	  as the sysclock. That means 80 MHz, when the microcontroller
 	  is running at 80 MHz. Changed 2017, as recommended by Axel.
 	*/
-	SYSKEY = 0xAA996655;  /* Unlock OSCCON, step 1 */
-	SYSKEY = 0x556699AA;  /* Unlock OSCCON, step 2 */
-	while(OSCCON & (1 << 21)); /* Wait until PBDIV ready */
-	OSCCONCLR = 0x180000; /* clear PBDIV bit <0,1> */
-	while(OSCCON & (1 << 21));  /* Wait until PBDIV ready */
-	SYSKEY = 0x0;  /* Lock OSCCON */
 	
 	/* Set up output pins */
 	AD1PCFG = 0xFFFF;
@@ -55,27 +55,37 @@ int main(void) {
 	SPI2CONSET = 0x20;
 	/* SPI2CON bit ON = 1; */
 	SPI2CONSET = 0x8000;
+
+
+
+
 	
 	display_init();
 	
 	display_update();
 	
-	display_image(0, 0, 5, filled_square);
-	display_image(32, 18, 5, filled_square);
+	// display_image(0, 0, 5, filled_square);
+	// display_image(32, 18, 5, filled_square);
+	display_image(64, 0, 5, filled_square);
+	// display_image(64, 14, 5, filled_square);
+	// display_image(64, 27, 5, filled_square);
 	
 	labinit(); /* Do any lab-specific initialization */
-
+	// knapptryck();
 	while( 1 )
 	{
-	  labwork(); /* Do lab-specific things again and again */
-
-
 		// on button press, move main character right on x axis
 		// use knapptryck() from wasd.c
-		knapptryck();
 
-
+		// display_image(64, 14, 5, filled_square);
+		
+		//display_clear();
 		display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
+		knapptryck();
+		// display_image(64, 32, 5, filled_square);
+		delay( 1000 );
+		clear_display();
+
 
 	}
 	return 0;

@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <pic32mx.h>
-#include "mipslab.h"
+#include "functiondefinitions.h"  /* Declarations for functions */
 
 volatile uint32_t *portDAddress = (volatile uint32_t *) &PORTD;
 

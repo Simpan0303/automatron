@@ -1,32 +1,38 @@
-public int x_mainCharacter=64;     //fixa till logisk start sen
-public int y_mainCharacter=32;     //fixa till logisk start sen
-public int riktninggevär=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
-public int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
-public int fiendekoordinat[2][1];    //fiendes koordinater
+int x_mainCharacter=64;     //fixa till logisk start sen
+int y_mainCharacter=14;     //fixa till logisk start sen
+/*
+int riktninggevär=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
+int[] kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
+int[] fiendekoordinat[2][1];    //fiendes koordinater
+*/
+// C har inte public
 
 
 /*
 --display--
 bredd: 128
-höjd: 64
+höjd: 32
 -----------
 */
 
+// bit1 == bit2 is not valid in C. Use bit1 & bit2 instead.
+
 void knapptryck()
 {
-    if(8==7|getbtns())          //1000 maskas till 1111 
+    if(0x4 & getbtns())          //1000 maskas till 1111 
       {
-        y_mainCharacter--;//y_mainCharacter går vänster med a
+        x_mainCharacter--;//y_mainCharacter går vänster med a
       }
-      if(4==11|getbtns())
+      /*
+      if(4 & 11|getbtns())
       {
         x_mainCharacter++;//x_mainCharacter går upp med w
       }
-      if(2==13|getbtns())
+      if(2 & 13|getbtns())
       {
         y_mainCharacter++;//y_mainCharacter går höger med d
       }
-      if(1==15|getbtns())
+      if(1 & 15|getbtns())
       {
         x_mainCharacter--;//x_mainCharacter går nedåt med s
       }
@@ -34,7 +40,10 @@ void knapptryck()
       {
         //inget antar jag, finns för om flera knappar trycks samtidigt
       }
+      */
 }
+
+/* Bortkommenterat för testning av player movement
 
 void spacktryck()
 {
@@ -132,6 +141,7 @@ void kulfärd(int x, int y, int riktning)                                       
       }
 }
 
+
 void fiendemanövrering(int fiendenummer)              //flyttar fiende mot spelaren
 {
   if(fiendekoordinat[0][fiendenummer]>x_mainCharacter)
@@ -159,7 +169,7 @@ void skada()                                        //ska se om spelare och fien
 
 
 
-
+*/
 
 
 //det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();

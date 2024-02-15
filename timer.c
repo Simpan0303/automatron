@@ -15,7 +15,7 @@
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
-#include "mipslab.h"  /* Declatations for these labs */
+#include "functiondefinitions.h"  /* Declarations for functions */
 
 #define INTCON_MVEC_MASK (1 << 12)
 

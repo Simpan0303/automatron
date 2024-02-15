@@ -6,7 +6,7 @@
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
-#include "mipslab.h"  /* Declatations for these labs */
+#include "functiondefinitions.h"  /* Declarations for functions */
 
 /* Declare a helper function which is local to this file */
 static void num32asc( char * s, int ); 
@@ -142,6 +142,9 @@ void display_string(int line, char *s) {
 }
 
 
+
+
+
 /*
 -------------------
 Display image (2D array)
@@ -152,7 +155,7 @@ void display_image(int x, int y, int size, const uint8_t data[][size]) {
     int j, page, bit;
 
     int page_start = y / 8;
-    int page_end = (y + 4) / 8; // Calculate the ending page based on 5 pixels height
+    int page_end = (y + size - 1) / 8; // Calculate the ending page based on the image height
 
     for (page = page_start; page <= page_end; page++) {
         for (j = 0; j < size; j++) { // Iterate over the width of the icon
@@ -170,11 +173,9 @@ void display_image(int x, int y, int size, const uint8_t data[][size]) {
             uint8_t dataByte = 0;
             int bit_offset = y % 8;
             for (bit = 0; bit < 8; bit++) {
-                if (bit >= bit_offset && bit < bit_offset + 5) {
-                    int row = bit - bit_offset;
-                    if (row < size && data[(page - page_start) * size + row][j]) {
-                        dataByte |= (1 << bit);
-                    }
+                int row = bit + page * 8 - y; // Calculate the row of the image data to use
+                if (row >= 0 && row < size && data[row][j]) {
+                    dataByte |= (1 << bit);
                 }
             }
 
@@ -183,14 +184,33 @@ void display_image(int x, int y, int size, const uint8_t data[][size]) {
     }
 }
 
+/*
+-------------------
+Clear Display (128x32 pixels)
+By: Simon Svanberg
+*/
 
+void clear_display() {
+    int page, column;
 
+    for (page = 0; page < 8; page++) {
+        for (column = 0; column < 128; column++) {
+            DISPLAY_CHANGE_TO_COMMAND_MODE;
 
+            // Set page address
+            spi_send_recv(0xB0 | page);
 
+            // Set column address
+            spi_send_recv(0x00 | (column & 0x0F)); // Lower nibble
+            spi_send_recv(0x10 | (column >> 4)); // Upper nibble
 
+            DISPLAY_CHANGE_TO_DATA_MODE;
 
-
-
+            // Send zero to clear the pixel
+            spi_send_recv(0x00);
+        }
+    }
+}
 
 
 

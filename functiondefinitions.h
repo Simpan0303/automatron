@@ -9,6 +9,7 @@
 
 /* Declare display-related functions from mipslabfunc.c */
 void display_image(int x, int y, int size, const uint8_t data[][size]); // size is length and/or width of the image
+void clear_display(void);
 void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
@@ -55,3 +56,6 @@ int getsw(void);
 void enable_interrupt(void);
 
 void knapptryck(void);
+
+extern int x_mainCharacter;
+extern int y_mainCharacter;
