@@ -140,8 +140,11 @@ void avfyrametod(int riktning,int x,int y)                                      
 
 /*
 
-void kulfärd(int x, int y, int riktning)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
+void kulfärd(int vilkenkula)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
 {
+  int x=kula[0][vilkenkula];
+  int y=kula[1][vilkenkula];
+  int riktning=kula[2][vilkenkula];
   if(3==riktning || 6==riktning || 7==riktning)          //1000 maskas till 1111 
       {
         y--;//y går vänster
@@ -162,6 +165,8 @@ void kulfärd(int x, int y, int riktning)                                       
       {
         //inget antar jag, finns för om flera knappar trycks samtidigt
       }
+      kula[0][vilkenkula]=x;
+      kula[1][vilkenkula]=y;
 }
 
 
