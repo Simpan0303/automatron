@@ -75,7 +75,6 @@ void shoot_bullet() {
 
 }
 
-// aaaaghhhh
 // void border_collision() {
 
 
