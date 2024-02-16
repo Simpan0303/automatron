@@ -25,8 +25,9 @@ int prime = 1234567;
 
 volatile int *trise;
 volatile int *porte;
-int timeoutcount = 0; // Declare timeoutcount as a global variable
 
+extern const uint8_t filled_square[][5];
+int timeoutcount = 0; // Declare timeoutcount as a global variable
 
 char textstring[] = "text, more text, and even more text!";
 
@@ -80,11 +81,23 @@ void labinit( void )
   */
 }
 
-void labwork( void ) {
-  prime = nextprime( prime );
-  time2string(textstring, mytime);
-  display_string(3, textstring);
-  tick(&mytime);
+void game_timer( void ) {
+  // Game speed
+	if (IFS(0) & 0x100) {
+		IFSCLR(0) = 0x100;
+		timeoutcount++;
+
+		if (timeoutcount >= 1) //kske modifiera
+		{
+			timeoutcount = 0;
+      knapptryck();
+			clear_display();
+      
+			display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
+				
+		}
+			
+	}
 
 }
 

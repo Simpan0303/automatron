@@ -13,6 +13,13 @@ int getsw(void) {
 }
 
 // Function to get the status of the buttons
-int getbtns(void) {
+
+// btn2-4 are mapped to RD5-7
+unsigned int getbtns(void) {
     return ((PORTD >> 5) & 0x7); // Shift right 5 bits and mask with 0x7 to get the 3 least significant bits
+}
+
+// btn1 is mapped to RF1
+unsigned int getbtn1(void) {
+    return (((PORTF >> 1) & 0x1)<<9); // Shift right 5 bits and mask with 0x1 to get the least significant bit
 }

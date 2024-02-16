@@ -186,7 +186,7 @@ void display_image(int x, int y, int size, const uint8_t data[][size]) {
 
 /*
 -------------------
-Clear Display (128x32 pixels)
+Clear Display (128x32)
 By: Simon Svanberg
 */
 

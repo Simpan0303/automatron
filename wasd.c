@@ -15,32 +15,31 @@ höjd: 32
 -----------
 */
 
+
+/*
+-------------------
+Button Inputs
+By: Isak Erikson Winbäck
+Modified by: Simon Svanberg
+*/
+
 // bit1 == bit2 is not valid in C. Use bit1 & bit2 instead.
 
 void knapptryck()
 {
-    if(0x4 & getbtns())          //1000 maskas till 1111 
-      {
-        x_mainCharacter--;//y_mainCharacter går vänster med a
-      }
-      /*
-      if(4 & 11|getbtns())
-      {
-        x_mainCharacter++;//x_mainCharacter går upp med w
-      }
-      if(2 & 13|getbtns())
-      {
-        y_mainCharacter++;//y_mainCharacter går höger med d
-      }
-      if(1 & 15|getbtns())
-      {
-        x_mainCharacter--;//x_mainCharacter går nedåt med s
-      }
-      else
-      {
-        //inget antar jag, finns för om flera knappar trycks samtidigt
-      }
-      */
+    int buttons = getbtns();
+    if (0x8 & buttons) {      // Button 4 (mapped to RD11)
+        x_mainCharacter--;     // y_mainCharacter moves left
+    }
+    if (0x4 & buttons) {      // Button 3 (mapped to RD10)
+        y_mainCharacter++;    // x_mainCharacter moves up
+    }
+    if (0x2 & buttons) {      // Button 2 (mapped to RD9)
+        y_mainCharacter--;    // x_mainCharacter moves down
+    }
+    if (0x1 & buttons) {      // Button 1 (mapped to RD8)
+        x_mainCharacter--;    // x_mainCharacter moves right
+    }
 }
 
 /* Bortkommenterat för testning av player movement

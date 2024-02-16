@@ -11,8 +11,6 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "functiondefinitions.h"  /* Declarations for functions */
 
-extern const uint8_t filled_square[][5];
-
 
 
 
@@ -66,7 +64,7 @@ int main(void) {
 	
 	// display_image(0, 0, 5, filled_square);
 	// display_image(32, 18, 5, filled_square);
-	display_image(64, 0, 5, filled_square);
+	// display_image(64, 0, 5, filled_square);
 	// display_image(64, 14, 5, filled_square);
 	// display_image(64, 27, 5, filled_square);
 	
@@ -74,17 +72,15 @@ int main(void) {
 	// knapptryck();
 	while( 1 )
 	{
+		game_timer(); /* Do lab-specific things again and again */
+
+
 		// on button press, move main character right on x axis
 		// use knapptryck() from wasd.c
 
-		// display_image(64, 14, 5, filled_square);
 		
-		//display_clear();
-		display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
-		knapptryck();
+		
 		// display_image(64, 32, 5, filled_square);
-		delay( 1000 );
-		clear_display();
 
 
 	}
