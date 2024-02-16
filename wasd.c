@@ -1,5 +1,7 @@
-int x_mainCharacter=64;     //fixa till logisk start sen
-int y_mainCharacter=14;     //fixa till logisk start sen
+#include <stdint.h>   /* Declarations of uint_32 and the like */
+#include <pic32mx.h>  /* Declarations of system-specific addresses etc */
+#include "functiondefinitions.h"  /* Declarations for functions */
+
 /*
 int riktninggevär=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
 int[] kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
@@ -24,7 +26,8 @@ Modified by: Simon Svanberg
 */
 
 // bit1 == bit2 is not valid in C. Use bit1 & bit2 instead.
-
+int x_mainCharacter=64;     //fixa till logisk start sen
+int y_mainCharacter=14;     //fixa till logisk start sen
 void knapptryck()
 {
     int buttons = getbtns();
@@ -42,6 +45,39 @@ void knapptryck()
         x_mainCharacter++;    
     }
 }
+
+// Test shooting with switches
+// On switch activation, spawn a "bullet" in the direction of the switch
+int bullet_x, bullet_y;
+extern const uint8_t filled_square[][5];
+// bullet_init
+void bullet_init() {
+    bullet_x = x_mainCharacter;
+    bullet_y = y_mainCharacter;
+    display_image(bullet_x, bullet_y, 5, filled_square);
+}
+
+
+// bullet_spawn
+void shoot_bullet() {
+    int switches = getsw();
+    if (0x8 & switches) {      // Switch 4 (mapped to RD3)
+        bullet_x--;     
+    }
+    if (0x4 & switches) {      // Switch 3 (mapped to RD2)
+        bullet_y--;    
+    }
+    if (0x2 & switches) {      // Switch 2 (mapped to RD1)
+        bullet_y++;    
+    }
+    if (0x1 & switches) {      // Switch 1 (mapped to RD0)
+        bullet_x++;    
+    }
+
+}
+
+
+
 
 /* Bortkommenterat för testning av player movement
 

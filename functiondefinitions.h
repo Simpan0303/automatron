@@ -60,3 +60,9 @@ extern int x_mainCharacter;
 extern int y_mainCharacter;
 
 void border_collision(void);
+
+
+// bullet logic
+extern int bullet_x, bullet_y;
+void bullet_init(void);
+void shoot_bullet(void);

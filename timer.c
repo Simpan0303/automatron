@@ -93,6 +93,12 @@ void game_loop( void ) {
 
       // inputs
       knapptryck();
+      shoot_bullet(); // spaktryck();
+      // If shoot_bullet() is called, spawn bullet at mainCharacter position
+      bullet_init();
+
+      display_image(bullet_x, bullet_y, 5, filled_square);
+
       // collisions
       border_collision();
 
