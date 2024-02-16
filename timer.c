@@ -93,12 +93,14 @@ void game_loop( void ) {
 
       // inputs
       knapptryck();
-      // shoot_bullet(); // spaktryck();
+      spaktryck();
       // If shoot_bullet() is called, spawn bullet at mainCharacter position
       // bullet_init();
-      avfyrametod(riktninggevär, x_mainCharacter, y_mainCharacter);
-
-      display_image(bullet_x, bullet_y, 5, filled_square);
+      //avfyrametod(riktninggevär, x_mainCharacter, y_mainCharacter);
+for(int i=0;kula[0][i]!=NULL;i++)
+	{
+      		display_image(kula[0][i], kula[1][i], 5, filled_square);
+	}
 
       // collisions
       border_collision();
