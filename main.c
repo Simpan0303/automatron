@@ -72,7 +72,7 @@ int main(void) {
 	// knapptryck();
 	while( 1 )
 	{
-		game_timer(); /* Do lab-specific things again and again */
+		game_loop(); /* Do lab-specific things again and again */
 
 
 		// on button press, move main character right on x axis

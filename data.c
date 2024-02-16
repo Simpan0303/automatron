@@ -158,6 +158,7 @@ Base shape for player object
 By: Simon Svanberg
 */
 
+// Test Entity
 const uint8_t filled_square[][5] = {
     {1, 1, 1, 1, 1},
     {1, 1, 1, 1, 1},
@@ -165,3 +166,14 @@ const uint8_t filled_square[][5] = {
     {1, 1, 1, 1, 1},
     {1, 1, 1, 1, 1}
 };
+
+
+// Player
+
+// Player turned right
+
+// Player turned left
+
+// Player turned up
+
+// Player turned down

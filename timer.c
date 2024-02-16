@@ -81,16 +81,21 @@ void labinit( void )
   */
 }
 
-void game_timer( void ) {
+void game_loop( void ) {
   // Game speed
 	if (IFS(0) & 0x100) {
 		IFSCLR(0) = 0x100;
 		timeoutcount++;
 
-		if (timeoutcount >= 1) //kske modifiera
+		if (timeoutcount >= 1) //kske modifiera, ska inte vara nödvändigt
 		{
 			timeoutcount = 0;
+
+      // inputs
       knapptryck();
+      // collisions
+      border_collision();
+
 			clear_display();
       
 			display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);

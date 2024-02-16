@@ -212,6 +212,36 @@ void clear_display() {
     }
 }
 
+/*
+-------------------
+Border Collision (128x32)
+By: Simon Svanberg
+*/
+void border_collision(void) {
+    if (x_mainCharacter < 0) {
+        x_mainCharacter = 0;
+    }
+    if (x_mainCharacter > 123) {
+        x_mainCharacter = 123;
+    }
+    if (y_mainCharacter < 0) {
+        y_mainCharacter = 0;
+    }
+    if (y_mainCharacter > 24) {
+        y_mainCharacter = 24;
+    }
+
+}
+
+
+
+/*
+-------------------
+Bullet/Hit Collision Detection
+By: Simon Svanberg
+*/
+
+
 
 
 void display_update(void) {

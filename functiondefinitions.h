@@ -17,7 +17,7 @@ uint8_t spi_send_recv(uint8_t data);
 
 /* Declare lab-related functions from mipslabfunc.c */
 char * itoaconv( int num );
-void game_timer(void);
+void game_loop(void);
 int nextprime( int inval );
 void quicksleep(int cyc);
 void tick( unsigned int * timep );
@@ -56,6 +56,7 @@ int getsw(void);
 void enable_interrupt(void);
 
 void knapptryck(void);
-
 extern int x_mainCharacter;
 extern int y_mainCharacter;
+
+void border_collision(void);

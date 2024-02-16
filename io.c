@@ -21,5 +21,5 @@ unsigned int getbtns(void) {
 
 // btn1 is mapped to RF1
 unsigned int getbtn1(void) {
-    return (((PORTF >> 1) & 0x1)<<9); // Shift right 5 bits and mask with 0x1 to get the least significant bit
+    return (((PORTF >> 1) & 0x1)<<3); // if the button is pressed, return 0x200, else return 0
 }

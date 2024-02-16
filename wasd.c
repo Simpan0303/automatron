@@ -28,17 +28,18 @@ Modified by: Simon Svanberg
 void knapptryck()
 {
     int buttons = getbtns();
-    if (0x8 & buttons) {      // Button 4 (mapped to RD11)
-        x_mainCharacter--;     // y_mainCharacter moves left
+    int btn1 = getbtn1();
+    if (0x4 & buttons) {      // Button 4 (mapped to RD11)
+        x_mainCharacter--;     
     }
-    if (0x4 & buttons) {      // Button 3 (mapped to RD10)
-        y_mainCharacter++;    // x_mainCharacter moves up
+    if (0x2 & buttons) {      // Button 3 (mapped to RD10)
+        y_mainCharacter--;    
     }
-    if (0x2 & buttons) {      // Button 2 (mapped to RD9)
-        y_mainCharacter--;    // x_mainCharacter moves down
+    if (0x1 & buttons) {      // Button 2 (mapped to RD9)
+        y_mainCharacter++;    
     }
-    if (0x1 & buttons) {      // Button 1 (mapped to RD8)
-        x_mainCharacter--;    // x_mainCharacter moves right
+    if (0x8 & btn1) {      // Button 1 (mapped to RF1)
+        x_mainCharacter++;    
     }
 }
 
