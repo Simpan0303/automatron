@@ -141,7 +141,7 @@ void spacktryck()
         //gevär förblir som det var
     }
 }
-
+*/
 
 void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta,       timer för hastighet av skott
 {
@@ -156,6 +156,8 @@ void avfyrametod(int riktning,int x,int y)                                      
     kula[2][i]=riktning;
   
 }
+
+/*
 
 void kulfärd(int x, int y, int riktning)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
 {
