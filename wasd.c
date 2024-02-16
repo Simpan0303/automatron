@@ -76,6 +76,7 @@ void shoot_bullet() {
 }
 
 // aaaaghhhh
+// void border_collision() {
 
 
 /* Bortkommenterat för testning av player movement
