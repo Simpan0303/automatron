@@ -2,11 +2,11 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "functiondefinitions.h"  /* Declarations for functions */
 
-/*
+
 int riktninggevär=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
 int[] kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 int[] fiendekoordinat[2][1];    //fiendes koordinater
-*/
+
 // C har inte public
 
 
@@ -57,60 +57,41 @@ void bullet_init() {
 }
 
 
-// bullet_spawn
-void shoot_bullet() {
+// spaktryck
+void spaktryck() {
     int switches = getsw();
     if (0x8 & switches) {      // Switch 4 (mapped to RD3)
-        bullet_x--;     
+        //vänster  
+        riktninggevär=3;
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)  
     }
     if (0x4 & switches) {      // Switch 3 (mapped to RD2)
-        bullet_y--;    
-    }
-    if (0x2 & switches) {      // Switch 2 (mapped to RD1)
-        bullet_y++;    
-    }
-    if (0x1 & switches) {      // Switch 1 (mapped to RD0)
-        bullet_x++;    
-    }
-
-}
-
-// Bullet spawn
-void bullet_spawn() {
-    display_image(bullet_x, bullet_y, 5, filled_square);
-}
-
-// void border_collision() {
-
-
-/* Bortkommenterat för testning av player movement
-
-void spacktryck()
-{
-    //getsw()           kom ihåg att inte skjuta åt flera håll samtidigt
-    if(8==getsw())
-    {
-        //vänster
-        riktninggevär=3;
-        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
-    }
-    if(4==getsw())
-    {
         //upp
         riktninggevär=0;
-        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)  
     }
-    if(2==getsw())
-    {
+    if (0x2 & switches) {      // Switch 2 (mapped to RD1)
         //höger
         riktninggevär=1;
         avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
     }
-    if(1==getsw())
-    {
+    if (0x1 & switches) {      // Switch 1 (mapped to RD0)
         //ned
         riktninggevär=2;
-        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)
+        avfyrametod(riktninggevär,x_mainCharacter,y_mainCharacter)   
+    }
+
+}
+
+// Bullet spawn? Idk, den måste iaf ritas med display_image
+/*
+void bullet_spawn() {
+    display_image(bullet_x, bullet_y, 5, filled_square);
+}
+*/
+
+// void border_collision() {
+/*
     }
     if(12==getsw())
     {

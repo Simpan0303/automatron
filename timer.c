@@ -93,9 +93,10 @@ void game_loop( void ) {
 
       // inputs
       knapptryck();
-      shoot_bullet(); // spaktryck();
+      // shoot_bullet(); // spaktryck();
       // If shoot_bullet() is called, spawn bullet at mainCharacter position
-      bullet_init();
+      // bullet_init();
+      avfyrametod(riktninggevär, x_mainCharacter, y_mainCharacter);
 
       display_image(bullet_x, bullet_y, 5, filled_square);
 
