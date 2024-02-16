@@ -54,7 +54,6 @@ extern const uint8_t filled_square[][5];
 void bullet_init() {
     bullet_x = x_mainCharacter;
     bullet_y = y_mainCharacter;
-    display_image(bullet_x, bullet_y, 5, filled_square);
 }
 
 
@@ -76,7 +75,7 @@ void shoot_bullet() {
 
 }
 
-
+// aaaaghhhh
 
 
 /* Bortkommenterat för testning av player movement
