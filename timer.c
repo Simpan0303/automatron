@@ -101,6 +101,10 @@ for(int i=0;kula[0][i]!=NULL;i++)
 	{
       		display_image(kula[0][i], kula[1][i], 5, filled_square);
 	}
+for(int i=0;kula[0][i]!=NULL;i++)
+	{
+		kulfärd(i);
+	}
 
       // collisions
       border_collision();
