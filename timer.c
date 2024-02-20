@@ -89,6 +89,7 @@ void labinit( void )
 #define BULLET_FIRE_DELAY_MAX 10  // Adjust this value to change the delay between bullets
 
 int bullet_fire_delay = 0;  // Declare bullet_fire_delay as a global variable
+int should_fire_bullet = 0;  // Declare should_fire_bullet as a global variable
 
 typedef struct {
     int x, y;
@@ -123,9 +124,9 @@ void spawn_bullet(int x, int y) {
 void update_bullets() {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (bullets[i].active) {
-            bullets[i].x += 2;
+            bullets[i].x += 2 * bullet_direction;  // Update bullet's x position based on its direction
             // Check if bullet is out of bounds
-            if (bullets[i].x >= SCREEN_WIDTH - 1) {
+            if (bullets[i].x >= SCREEN_WIDTH - 1 || bullets[i].x < 0) {
                 bullets[i].active = 0;  // Deactivate bullet
             }
         }
@@ -147,8 +148,12 @@ void game_loop(void) {
             spaktryck();
 
             // spawn bullet at mainCharacter position
-            if (bullet_fire_delay >= BULLET_FIRE_DELAY_MAX && should_spawn_bullet()) {
-                spawn_bullet(x_mainCharacter, y_mainCharacter);
+            if (bullet_fire_delay >= BULLET_FIRE_DELAY_MAX && should_fire_bullet) {
+                // Calculate the middle of the square
+                int middle_x = x_mainCharacter + 5 / 2;
+                int middle_y = y_mainCharacter + 5 / 2;
+
+                spawn_bullet(middle_x, middle_y);
                 bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
             }
 
@@ -171,9 +176,6 @@ void game_loop(void) {
         }
     }
 }
-
-
-
 
 
 

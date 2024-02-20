@@ -72,3 +72,11 @@ void bullet_init(void);
 void shoot_bullet(void);
 
 int should_spawn_bullet(void);
+extern int should_fire_bullet;
+
+void spawn_bullet(int x, int y);
+void update_bullets(void);
+#define DIRECTION_RIGHT 1
+#define DIRECTION_LEFT -1
+
+extern int bullet_direction;

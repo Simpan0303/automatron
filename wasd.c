@@ -61,13 +61,18 @@ int should_spawn_bullet() {
   return 1;
 }
 
+#define DIRECTION_RIGHT 1
+#define DIRECTION_LEFT -1
+
+int bullet_direction = DIRECTION_RIGHT;  // Global variable to control bullet direction
 // spaktryck
 void spaktryck() {
     int switches = getsw();
     if (0x8 & switches) {      // Switch 4 (mapped to RD3)
         //vänster  
         direction_gun=3;
-        should_spawn_bullet();
+        bullet_direction = DIRECTION_LEFT;  // Set bullet direction to left
+        should_fire_bullet = 1;  // Set the flag to fire a bullet
         //avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)  
     }
     if (0x4 & switches) {      // Switch 3 (mapped to RD2)
@@ -85,8 +90,11 @@ void spaktryck() {
     if (0x1 & switches) {      // Switch 1 (mapped to RD0)
         //ned
         direction_gun=2;
-        should_spawn_bullet();
+        should_fire_bullet = 1; 
+        bullet_direction = DIRECTION_RIGHT;
         //avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)   
+    } else {
+        should_fire_bullet = 0;
     }
 
 }
