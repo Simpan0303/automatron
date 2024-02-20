@@ -21,6 +21,7 @@ void game_loop(void);
 int nextprime( int inval );
 void quicksleep(int cyc);
 void tick( unsigned int * timep );
+void labinit( void );
 
 /* Declare display_debug - a function to help debugging.
 
@@ -52,12 +53,15 @@ void delay(int);
 void time2string( char *, int );
 /* Written as part of i/o lab: getbtns, getsw, enable_interrupt */
 unsigned int getbtns(void);
+unsigned int getbtn1(void);
 int getsw(void);
 void enable_interrupt(void);
 
 void knapptryck(void);
 extern int x_mainCharacter;
 extern int y_mainCharacter;
+void spaktryck(void);
+extern int direction_gun;
 
 void border_collision(void);
 
@@ -66,3 +70,5 @@ void border_collision(void);
 extern int bullet_x, bullet_y;
 void bullet_init(void);
 void shoot_bullet(void);
+
+int should_spawn_bullet(void);

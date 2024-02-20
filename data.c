@@ -167,6 +167,12 @@ const uint8_t filled_square[][5] = {
     {1, 1, 1, 1, 1}
 };
 
+// Bullet
+const uint8_t bullet[][2] = {
+	{1, 1},
+	{1, 1},
+};
+
 
 // Player
 

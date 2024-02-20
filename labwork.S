@@ -87,7 +87,7 @@ time2string:
 	sb $t6, 0($t5) 		
 	addi $t5, $t5, 1 	
     	
-    	#addi $t5, $t5, 1	# för att printa hela NINE, 
+    	#addi $t5, $t5, 1	# fï¿½r att printa hela NINE, 
     	jal skip2
     	nop
 skip:	    
@@ -131,7 +131,7 @@ li $t7,0                      #ny
     jvi:
         bne $a1,$a0,delay
         nop
-        add $t7,$t7,1          #ändrad
+        add $t7,$t7,1          #ï¿½ndrad
         ble $t7, 3360000, jvi 
         nop           
     j delay

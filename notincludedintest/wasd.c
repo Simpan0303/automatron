@@ -1,12 +1,15 @@
 public int x_mainCharacter=64;     //fixa till logisk start sen
 public int y_mainCharacter=32;     //fixa till logisk start sen
-public int riktninggevär=0;     //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
+public int direction_gun=0;     //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
 
 
 /*
 bredd: 128
 höjd: 64*/
 
+int should_spawn_bullet() {
+    return 1; // always spawn a bullet
+}
 void knapptryck()
 {
     if(8==7|getbtns())          //1000 maskas till 1111 
@@ -31,56 +34,64 @@ void knapptryck()
       }
 }
 
-void spacktryck()
+void spaktryck()
 {
     //getsw()           kom ihåg att inte skjuta åt flera håll samtidigt
     if(8==getsw())
     {
         //vänster
-        riktninggevär=3;
-        //avfyrametod(riktninggevär)
+        direction_gun=3;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(4==getsw())
     {
         //upp
-        riktninggevär=0;
-        //avfyrametod(riktninggevär)
+        direction_gun=0;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(2==getsw())
     {
         //höger
-        riktninggevär=1;
-        //avfyrametod(riktninggevär)
+        direction_gun=1;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(1==getsw())
     {
         //ned
-        riktninggevär=2;
-        //avfyrametod(riktninggevär)
+        direction_gun=2;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(12==getsw())
     {
         //vänster-upp
-        riktninggevär=7;
-        //avfyrametod(riktninggevär)
+        direction_gun=7;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(6==getsw())
     {
         //upphöger
-        riktninggevär=4;
-        //avfyrametod(riktninggevär)
+        direction_gun=4;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(3==getsw())
     {
         //ned-höger
-        riktninggevär=5;
-        //avfyrametod(riktninggevär)
+        direction_gun=5;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     if(9==getsw())
     {
         //ned-vänster
-        riktninggevär=6;
-        //avfyrametod(riktninggevär)
+        direction_gun=6;
+        should_spawn_bullet();
+        //avfyrametod(direction_gun)
     }
     else
     {
