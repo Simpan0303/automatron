@@ -106,7 +106,7 @@ void spawn_bullet(int x, int y, int x_speed, int y_speed) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (!bullets[i].active) {
             bullets[i].x = x;
-            bullets[i].y = y;
+            bullets[i].y = y + (y % 8);
             bullets[i].active = 1;
             bullets[i].x_speed = x_speed;
             bullets[i].y_speed = y_speed;
@@ -131,7 +131,8 @@ void game_loop(void) {
     // Game speed
     if (IFS(0) & 0x100) {
         IFSCLR(0) = 0x100;
-        timeoutcount++;
+        // timeoutcount++;
+        timeoutcount = 1;
 
         if (timeoutcount >= 1) {
             timeoutcount = 0;
@@ -152,8 +153,8 @@ void game_loop(void) {
             // spawn bullet at mainCharacter position
             if (bullet_fire_delay >= BULLET_FIRE_DELAY_MAX && should_fire_bullet) {
                 // Calculate the middle of the square
-                int middle_x = x_mainCharacter + 5 / 2;
-                int middle_y = y_mainCharacter + 5 / 2;
+                int middle_x = x_mainCharacter;
+                int middle_y = y_mainCharacter;
 
                 spawn_bullet(middle_x, middle_y, x_speed, y_speed);
                 bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
