@@ -101,6 +101,7 @@ void init_bullets() {
     }
 }
 
+
 void spawn_bullet(int x, int y, int x_speed, int y_speed) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (!bullets[i].active) {

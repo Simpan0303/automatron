@@ -89,6 +89,8 @@ void spaktryck(int* x_speed, int* y_speed) {
         *x_speed = DIRECTION_RIGHT;
         should_fire_bullet = 1; 
     }
+
+    
 }
 
 // Bullet spawn? Idk, den måste iaf ritas med display_image
