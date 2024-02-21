@@ -61,42 +61,34 @@ int should_spawn_bullet() {
   return 1;
 }
 
-#define DIRECTION_RIGHT 1
-#define DIRECTION_LEFT -1
 
-int bullet_direction = DIRECTION_RIGHT;  // Global variable to control bullet direction
+int bullet_direction;  // Default direction
 // spaktryck
-void spaktryck() {
+void spaktryck(int* x_speed, int* y_speed) {
     int switches = getsw();
+    should_fire_bullet = 0;
+    *x_speed = 0;
+    *y_speed = 0;
     if (0x8 & switches) {      // Switch 4 (mapped to RD3)
         //vänster  
-        direction_gun=3;
-        bullet_direction = DIRECTION_LEFT;  // Set bullet direction to left
-        should_fire_bullet = 1;  // Set the flag to fire a bullet
-        //avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)  
+        *x_speed = DIRECTION_LEFT;
+        should_fire_bullet = 1;
     }
     if (0x4 & switches) {      // Switch 3 (mapped to RD2)
         //upp
-        direction_gun=0;
-        should_spawn_bullet();
-        //avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)  
+        *y_speed = DIRECTION_UP;
+        should_fire_bullet = 1;
     }
     if (0x2 & switches) {      // Switch 2 (mapped to RD1)
         //höger
-        direction_gun=1;
-        should_spawn_bullet();
-        //avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        *y_speed = DIRECTION_DOWN;
+        should_fire_bullet = 1;
     }
     if (0x1 & switches) {      // Switch 1 (mapped to RD0)
         //ned
-        direction_gun=2;
+        *x_speed = DIRECTION_RIGHT;
         should_fire_bullet = 1; 
-        bullet_direction = DIRECTION_RIGHT;
-        //avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)   
-    } else {
-        should_fire_bullet = 0;
     }
-
 }
 
 // Bullet spawn? Idk, den måste iaf ritas med display_image

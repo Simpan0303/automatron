@@ -85,16 +85,13 @@ void labinit( void )
 
 
 
-#define MAX_BULLETS 10
-#define BULLET_FIRE_DELAY_MAX 10  // Adjust this value to change the delay between bullets
+
+
 
 int bullet_fire_delay = 0;  // Declare bullet_fire_delay as a global variable
 int should_fire_bullet = 0;  // Declare should_fire_bullet as a global variable
 
-typedef struct {
-    int x, y;
-    int active;
-} Bullet;
+
 
 Bullet bullets[MAX_BULLETS];
 
@@ -104,35 +101,31 @@ void init_bullets() {
     }
 }
 
-void spawn_bullet(int x, int y) {
+void spawn_bullet(int x, int y, int x_speed, int y_speed) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (!bullets[i].active) {
             bullets[i].x = x;
             bullets[i].y = y;
             bullets[i].active = 1;
-
-            // Check if bullet is out of bounds
-            if (bullets[i].x >= SCREEN_WIDTH) {
-                bullets[i].active = 0;  // Deactivate bullet
-            }
-
+            bullets[i].x_speed = x_speed;
+            bullets[i].y_speed = y_speed;
             break;
         }
     }
 }
 
-void update_bullets() {
-    for (int i = 0; i < MAX_BULLETS; i++) {
-        if (bullets[i].active) {
-            bullets[i].x += 2 * bullet_direction;  // Update bullet's x position based on its direction
-            // Check if bullet is out of bounds
-            if (bullets[i].x >= SCREEN_WIDTH - 1 || bullets[i].x < 0) {
-                bullets[i].active = 0;  // Deactivate bullet
-            }
-        }
+void update_bullet(Bullet* bullet) {
+    bullet->x += bullet->x_speed * BULLET_SPEED;
+    bullet->y += bullet->y_speed * BULLET_SPEED;
+
+    // Deactivate the bullet if it goes off screen
+    if (bullet->x < 0 || bullet->x > SCREEN_WIDTH || bullet->y < 0 || bullet->y > SCREEN_HEIGHT) {
+        bullet->active = 0;
     }
 }
 
+#define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
+void update_bullet(Bullet* bullet);
 void game_loop(void) {
     // Game speed
     if (IFS(0) & 0x100) {
@@ -145,7 +138,15 @@ void game_loop(void) {
 
             // inputs
             knapptryck();
-            spaktryck();
+            int x_speed, y_speed;
+            spaktryck(&x_speed, &y_speed);
+
+            // Update bullets
+            for (int i = 0; i < MAX_BULLETS; i++) {
+                if (bullets[i].active) {
+                    update_bullet(&bullets[i]);
+                }
+            }
 
             // spawn bullet at mainCharacter position
             if (bullet_fire_delay >= BULLET_FIRE_DELAY_MAX && should_fire_bullet) {
@@ -153,24 +154,23 @@ void game_loop(void) {
                 int middle_x = x_mainCharacter + 5 / 2;
                 int middle_y = y_mainCharacter + 5 / 2;
 
-                spawn_bullet(middle_x, middle_y);
+                spawn_bullet(middle_x, middle_y, x_speed, y_speed);
                 bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
             }
 
-            // update bullets
-            update_bullets();
+            
 
             // display bullets
             for (int i = 0; i < MAX_BULLETS; i++) {
                 if (bullets[i].active) {
-                  display_image(bullets[i].x, bullets[i].y, 2, bullet);
+                    display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
                 }
             }
 
             // collisions
             border_collision();
 
-            display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
+            display_image(x_mainCharacter, y_mainCharacter, 5, filled_square); // Draw the main character
 
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
         }

@@ -60,23 +60,48 @@ void enable_interrupt(void);
 void knapptryck(void);
 extern int x_mainCharacter;
 extern int y_mainCharacter;
-void spaktryck(void);
+void spaktryck(int* x_speed, int* y_speed);
 extern int direction_gun;
 
 void border_collision(void);
 
-
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 32
 // bullet logic
+#define DIRECTION_UP -1
+#define DIRECTION_DOWN 1
+#define DIRECTION_RIGHT 1
+#define DIRECTION_LEFT -1
+
+typedef struct {
+    int x;
+    int y;
+    int active;
+    int x_speed;  // Speed in the x direction
+    int y_speed;  // Speed in the y direction
+} Bullet;
+
+void spawn_bullet(int x, int y, int x_speed, int y_speed);
+
 extern int bullet_x, bullet_y;
 void bullet_init(void);
 void shoot_bullet(void);
 
 int should_spawn_bullet(void);
 extern int should_fire_bullet;
+extern int x_speed;
+extern int y_speed;
 
-void spawn_bullet(int x, int y);
-void update_bullets(void);
-#define DIRECTION_RIGHT 1
-#define DIRECTION_LEFT -1
+void update_bullets(Bullet* bullet);
+
+
+
+#define BULLET_SPEED 2
+#define BULLET_WIDTH 2
+#define MAX_BULLETS 10
+#define BULLET_FIRE_DELAY_MAX 5
+
+
+Bullet bullets[MAX_BULLETS];
 
 extern int bullet_direction;
