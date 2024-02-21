@@ -51,6 +51,8 @@ extern char textbuffer[4][16];
 /* Written as part of asm lab: delay, time2string */
 void delay(int);
 void time2string( char *, int );
+
+
 /* Written as part of i/o lab: getbtns, getsw, enable_interrupt */
 unsigned int getbtns(void);
 unsigned int getbtn1(void);
@@ -61,6 +63,8 @@ void knapptryck(void);
 extern int x_mainCharacter;
 extern int y_mainCharacter;
 void spaktryck(int* x_speed, int* y_speed);
+extern int lastButtonPressTime;
+#define BUTTON_PRESS_DELAY 10  // Adjust this value based on your needs
 extern int direction_gun;
 
 void border_collision(void);
@@ -105,3 +109,5 @@ void update_bullets(Bullet* bullet);
 Bullet bullets[MAX_BULLETS];
 
 extern int bullet_direction;
+
+

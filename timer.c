@@ -63,7 +63,7 @@ void labinit( void )
 
   T2CON = 0x0; // Stop the timer and clear the control register
   TMR2 = 0x0; // Clear the timer register
-  PR2 = 31250; // Load the period register with the value for 100ms
+  PR2 = 31250/4; // Load the period register with the value for 100ms
   T2CONSET = 0x70; // 1:256 Set prescaler (choose value based on calculation)
   IFSCLR(0) = 0x100; // Clear Timer 2 interrupt flag
   IECSET(0) = 0x100; // Enable Timer 2 interrupt
@@ -101,7 +101,8 @@ void init_bullets() {
     }
 }
 
-
+int x_speed = 0;
+int y_speed = 0;
 void spawn_bullet(int x, int y, int x_speed, int y_speed) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (!bullets[i].active) {
@@ -120,9 +121,16 @@ void update_bullet(Bullet* bullet) {
     bullet->y += bullet->y_speed * BULLET_SPEED;
 
     // Deactivate the bullet if it goes off screen
-    if (bullet->x < 0 || bullet->x > SCREEN_WIDTH || bullet->y < 0 || bullet->y > SCREEN_HEIGHT) {
+    if (bullet->x < 0 || bullet->x > SCREEN_WIDTH - 1 || bullet->y < 0 || bullet->y > SCREEN_HEIGHT - 1) {
         bullet->active = 0;
     }
+}
+void draw_bullets() {
+  for (int i = 0; i < MAX_BULLETS; i++) {
+    if (bullets[i].active) {
+      display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
+    }
+  }
 }
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
@@ -132,15 +140,14 @@ void game_loop(void) {
     if (IFS(0) & 0x100) {
         IFSCLR(0) = 0x100;
         // timeoutcount++;
-        timeoutcount = 1;
+        timeoutcount = 0;
 
-        if (timeoutcount >= 1) {
+        if (timeoutcount >= 0) {
             timeoutcount = 0;
             clear_display();
 
             // inputs
             knapptryck();
-            int x_speed, y_speed;
             spaktryck(&x_speed, &y_speed);
 
             // Update bullets
@@ -159,15 +166,9 @@ void game_loop(void) {
                 spawn_bullet(middle_x, middle_y, x_speed, y_speed);
                 bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
             }
-
             
-
             // display bullets
-            for (int i = 0; i < MAX_BULLETS; i++) {
-                if (bullets[i].active) {
-                    display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
-                }
-            }
+            draw_bullets();
 
             // collisions
             border_collision();
