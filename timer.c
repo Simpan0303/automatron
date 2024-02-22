@@ -85,7 +85,7 @@ void labinit( void )
 
 
 
-
+// --------- BELOW WILL BE MOVED TO ANOTHER FILE ------------
 
 
 int bullet_fire_delay = 0;  // Declare bullet_fire_delay as a global variable
@@ -107,7 +107,7 @@ void spawn_bullet(int x, int y, int x_speed, int y_speed) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (!bullets[i].active) {
             bullets[i].x = x;
-            bullets[i].y = y + (y % 8);
+            bullets[i].y = y_mainCharacter;
             bullets[i].active = 1;
             bullets[i].x_speed = x_speed;
             bullets[i].y_speed = y_speed;
@@ -132,6 +132,19 @@ void draw_bullets() {
     }
   }
 }
+
+// ---------  ABOVE WILL BE MOVED TO ANOTHER FILE ------------
+
+// enemy logic
+// spawn enemy at random position at borders
+// move enemy towards mainCharacter x and y position
+// if enemy collides with mainCharacter, game over
+// if enemy collides with bullet, enemy dies
+
+
+
+
+
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
 void update_bullet(Bullet* bullet);
