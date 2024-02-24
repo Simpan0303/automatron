@@ -115,19 +115,44 @@ void spawn_bullet(int x, int y, int x_speed, int y_speed) {
     }
 }
 
+// Update the bullet's position
 void update_bullet(Bullet* bullet) {
+    // Previous position
+    bullet->prev_x = bullet->x;
+    bullet->prev_y = bullet->y;
+
+    // New position
     bullet->x += bullet->x_speed * BULLET_SPEED;
     bullet->y += bullet->y_speed * BULLET_SPEED;
 
     // Deactivate the bullet if it goes off screen
-    if (bullet->x < 0 || bullet->x > SCREEN_WIDTH - 1 || bullet->y < 0 || bullet->y > SCREEN_HEIGHT - 1) {
+    if (bullet->x < 0 || bullet->x > SCREEN_WIDTH - 2 || bullet->y < 0 || bullet->y > SCREEN_HEIGHT - 1) {
         bullet->active = 0;
     }
 }
-void draw_bullets() {
+
+void border_collision_bullet() {
+    for (int i = 0; i < MAX_BULLETS; i++) {
+            if (bullets[i].x < 0 || bullets[i].x > SCREEN_WIDTH - 2 || bullets[i].y < 0 || bullets[i].y > SCREEN_HEIGHT - 1) {
+                bullets[i].active = 0;
+            }
+    }
+}
+
+
+void render_bullets() {
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (bullets[i].active) {
-      display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
+        if (bullets[i].x != bullets[i].prev_x || bullets[i].y != bullets[i].prev_y) {
+            clear_image(bullets[i].prev_x, bullets[i].prev_y, 2, bullet); // Clear the bullet
+        }
+
+        display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
+        // Update the previous position variables
+        bullets[i].prev_x = bullets[i].x;
+        bullets[i].prev_y = bullets[i].y;
+    } else if (bullets[i].active == 0) {
+        clear_image(bullets[i].x, bullets[i].y, 2, bullet); // Clear the bullet
     }
   }
 }
@@ -165,7 +190,9 @@ void spawn_enemy(int x, int y) {
     }
 }
 
+
 void update_enemy() {
+
     // Update all active enemies
     for (int i = 0; i < num_enemies; i++) {
         if (enemies[i].active) {
@@ -191,10 +218,29 @@ void update_enemy() {
 
 
 // --------- ENEMY LOGIC ABOVE ------------
-#define STATE_DRAW 0
-#define STATE_CLEAR 1
-int mainCharacterState = STATE_DRAW;
 
+// --------- MAIN CHARACTER LOGIC BELOW ------------
+int mainCharacterState = STATE_DRAW;
+// update mainCharacter
+void update_mainCharacter() {
+    // Define previous position variables at a global scope
+    int prev_x_mainCharacter = x_mainCharacter;
+    int prev_y_mainCharacter = y_mainCharacter;
+    knapptryck();
+    if (mainCharacterState == STATE_DRAW) {
+        // Clear the image at the previous position if the character has moved
+        if (x_mainCharacter != prev_x_mainCharacter || y_mainCharacter != prev_y_mainCharacter) {
+            clear_image(prev_x_mainCharacter, prev_y_mainCharacter, 5, filled_square);
+        }
+
+        // Draw the main character at the new position
+        display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
+
+        // Update the previous position variables
+        prev_x_mainCharacter = x_mainCharacter;
+        prev_y_mainCharacter = y_mainCharacter;
+    }
+}
 
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
@@ -209,30 +255,13 @@ void game_loop(void) {
         if (timeoutcount >= 0) {
             timeoutcount = 0;
             //clear_display();
+            border_collision_bullet();
 
 
             // inputs
             spaktryck(&x_speed, &y_speed);
-            // Define previous position variables at a global scope
-            int prev_x_mainCharacter = x_mainCharacter;
-            int prev_y_mainCharacter = y_mainCharacter;
-            knapptryck();
-
-
-            // update mainCharacter
-            if (mainCharacterState == STATE_DRAW) {
-                // Clear the image at the previous position if the character has moved
-                if (x_mainCharacter != prev_x_mainCharacter || y_mainCharacter != prev_y_mainCharacter) {
-                    clear_image(prev_x_mainCharacter, prev_y_mainCharacter, 5, filled_square);
-                }
-
-                // Draw the main character at the new position
-                display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
-
-                // Update the previous position variables
-                prev_x_mainCharacter = x_mainCharacter;
-                prev_y_mainCharacter = y_mainCharacter;
-            }
+            
+            update_mainCharacter(); // Move the main character
 
             // Update bullets
             for (int i = 0; i < MAX_BULLETS; i++) {
@@ -252,7 +281,8 @@ void game_loop(void) {
             }
             
             // display bullets
-            draw_bullets();
+            render_bullets();
+            
 
             // collisions
             border_collision();

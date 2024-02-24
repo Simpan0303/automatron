@@ -67,6 +67,11 @@ int getsw(void);
 void enable_interrupt(void);
 
 void knapptryck(void);
+
+#define STATE_DRAW 0
+#define STATE_CLEAR 1
+
+
 extern int x_mainCharacter;
 extern int y_mainCharacter;
 void spaktryck(int* x_speed, int* y_speed);
@@ -87,6 +92,9 @@ void border_collision(void);
 typedef struct {
     int x;
     int y;
+    int prev_x;
+    int prev_y;
+
     int active;
     int x_speed;  // Speed in the x direction
     int y_speed;  // Speed in the y direction
