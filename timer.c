@@ -191,6 +191,10 @@ void update_enemy() {
 
 
 // --------- ENEMY LOGIC ABOVE ------------
+#define STATE_DRAW 0
+#define STATE_CLEAR 1
+int mainCharacterState = STATE_DRAW;
+
 
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
@@ -205,13 +209,30 @@ void game_loop(void) {
         if (timeoutcount >= 0) {
             timeoutcount = 0;
             //clear_display();
-            display_image(x_mainCharacter, y_mainCharacter, 5, filled_square); // Draw the main character
-            clear_image(x_mainCharacter, y_mainCharacter, 5, enemy); // Clear the enemy
 
 
             // inputs
             spaktryck(&x_speed, &y_speed);
+            // Define previous position variables at a global scope
+            int prev_x_mainCharacter = x_mainCharacter;
+            int prev_y_mainCharacter = y_mainCharacter;
             knapptryck();
+
+
+            // update mainCharacter
+            if (mainCharacterState == STATE_DRAW) {
+                // Clear the image at the previous position if the character has moved
+                if (x_mainCharacter != prev_x_mainCharacter || y_mainCharacter != prev_y_mainCharacter) {
+                    clear_image(prev_x_mainCharacter, prev_y_mainCharacter, 5, filled_square);
+                }
+
+                // Draw the main character at the new position
+                display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
+
+                // Update the previous position variables
+                prev_x_mainCharacter = x_mainCharacter;
+                prev_y_mainCharacter = y_mainCharacter;
+            }
 
             // Update bullets
             for (int i = 0; i < MAX_BULLETS; i++) {
@@ -242,7 +263,6 @@ void game_loop(void) {
 
             // update_enemy(); // Move the enemy
             // spawn_enemy(10, 10); // Draw the enemy
-
 
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
         }
