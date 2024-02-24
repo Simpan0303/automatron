@@ -10,6 +10,8 @@
 /* Declare display-related functions from mipslabfunc.c */
 void display_image(int x, int y, int size, const uint8_t data[][size]); // size is length and/or width of the image
 void clear_display(void);
+void clear_image(int x, int y, int size, const uint8_t data[][size]);
+
 void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
@@ -53,7 +55,12 @@ void delay(int);
 void time2string( char *, int );
 
 
-/* Written as part of i/o lab: getbtns, getsw, enable_interrupt */
+// Declare display-related functions from mipslabfunc.c
+// and images as 2D arrays
+extern const uint8_t filled_square[][5];
+extern const uint8_t bullet[][2];
+extern const uint8_t enemy[][3];
+
 unsigned int getbtns(void);
 unsigned int getbtn1(void);
 int getsw(void);
@@ -109,5 +116,19 @@ void update_bullets(Bullet* bullet);
 Bullet bullets[MAX_BULLETS];
 
 extern int bullet_direction;
+
+
+// Enemy logic
+#define MAX_ENEMIES 1
+typedef struct {
+    int x;
+    int y;
+    int active;
+    int x_speed;  // Speed in the x direction
+    int y_speed;  // Speed in the y direction
+} Enemy;
+
+void spawn_enemy(int x, int y);
+void update_enemy();
 
 

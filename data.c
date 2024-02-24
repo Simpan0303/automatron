@@ -173,6 +173,13 @@ const uint8_t bullet[][2] = {
 	{1, 1},
 };
 
+// Test Entity
+const uint8_t enemy[][3] = {
+	{1, 1, 1},
+	{1, 1, 1},
+	{1, 1, 1}
+};
+
 
 // Player
 

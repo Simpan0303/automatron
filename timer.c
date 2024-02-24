@@ -27,8 +27,7 @@ int prime = 1234567;
 volatile int *trise;
 volatile int *porte;
 
-extern const uint8_t filled_square[][5];
-extern const uint8_t bullet[][2];
+
 int timeoutcount = 0; // Declare timeoutcount as a global variable
 
 char textstring[] = "text, more text, and even more text!";
@@ -63,7 +62,7 @@ void labinit( void )
 
   T2CON = 0x0; // Stop the timer and clear the control register
   TMR2 = 0x0; // Clear the timer register
-  PR2 = 31250/4; // Load the period register with the value for 100ms
+  PR2 = 31250; // Load the period register with the value for 100ms
   T2CONSET = 0x70; // 1:256 Set prescaler (choose value based on calculation)
   IFSCLR(0) = 0x100; // Clear Timer 2 interrupt flag
   IECSET(0) = 0x100; // Enable Timer 2 interrupt
@@ -85,7 +84,7 @@ void labinit( void )
 
 
 
-// --------- BELOW WILL BE MOVED TO ANOTHER FILE ------------
+// --------- BULLET LOGIC - BELOW WILL BE MOVED TO ANOTHER FILE ------------
 
 
 int bullet_fire_delay = 0;  // Declare bullet_fire_delay as a global variable
@@ -135,15 +134,63 @@ void draw_bullets() {
 
 // ---------  ABOVE WILL BE MOVED TO ANOTHER FILE ------------
 
-// enemy logic
-// spawn enemy at random position at borders
+// --------- ENEMY LOGIC BELOW ------------
+
+// Enemy init
+Enemy enemies[MAX_ENEMIES];
+int num_enemies = 0; // Number of active enemies
+
+void init_enemies() {
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        enemies[i].active = 0;
+    }
+}
+
+// spawn enemy at fixed position
 // move enemy towards mainCharacter x and y position
 // if enemy collides with mainCharacter, game over
 // if enemy collides with bullet, enemy dies
+void spawn_enemy(int x, int y) {
+    for (int i = 0; i < MAX_BULLETS; i++) {
+        if (!enemies[num_enemies].active) {
+            enemies[num_enemies].x = x;
+            enemies[num_enemies].y = y;
+            enemies[num_enemies].active = 1;
+            enemies[num_enemies].x_speed = x_speed;
+            enemies[num_enemies].y_speed = y_speed;
+            display_image(enemies[num_enemies].x, enemies[num_enemies].y, 3, enemy); // Draw the enemy
+            num_enemies++;
+            break;
+        }
+    }
+}
+
+void update_enemy() {
+    // Update all active enemies
+    for (int i = 0; i < num_enemies; i++) {
+        if (enemies[i].active) {
+            // Move the enemy towards the mainCharacter
+            if (x_mainCharacter > enemies[i].x) {
+                enemies[i].x++;
+            } else if (x_mainCharacter < enemies[i].x) {
+                enemies[i].x--;
+            }
+            if (y_mainCharacter > enemies[i].y) {
+                enemies[i].y++;
+            } else if (y_mainCharacter < enemies[i].y) {
+                enemies[i].y--;
+            }
+
+            clear_image(enemies[i].x, enemies[i].y, 3, enemy); // Clear the enemy
+
+            display_image(enemies[i].x, enemies[i].y, 3, enemy);
+        }
+    }
+}
 
 
 
-
+// --------- ENEMY LOGIC ABOVE ------------
 
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
@@ -157,11 +204,14 @@ void game_loop(void) {
 
         if (timeoutcount >= 0) {
             timeoutcount = 0;
-            clear_display();
+            //clear_display();
+            display_image(x_mainCharacter, y_mainCharacter, 5, filled_square); // Draw the main character
+            clear_image(x_mainCharacter, y_mainCharacter, 5, enemy); // Clear the enemy
+
 
             // inputs
-            knapptryck();
             spaktryck(&x_speed, &y_speed);
+            knapptryck();
 
             // Update bullets
             for (int i = 0; i < MAX_BULLETS; i++) {
@@ -186,7 +236,13 @@ void game_loop(void) {
             // collisions
             border_collision();
 
-            display_image(x_mainCharacter, y_mainCharacter, 5, filled_square); // Draw the main character
+            // clear_image(x_mainCharacter, y_mainCharacter, 5, enemy); // Clear the enemy
+
+            // display_image(x_mainCharacter, y_mainCharacter, 5, filled_square); // Draw the main character
+
+            // update_enemy(); // Move the enemy
+            // spawn_enemy(10, 10); // Draw the enemy
+
 
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
         }

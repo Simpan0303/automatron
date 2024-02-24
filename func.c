@@ -212,6 +212,51 @@ void clear_display() {
     }
 }
 
+
+
+/*
+Clear Image (2D array)
+By: Simon Svanberg
+*/
+
+// Clear image, turn off pixels
+// clear_image(enemies[i].x, enemies[i].y, 3, enemy);
+void clear_image(int x, int y, int size, const uint8_t data[][size]) {
+
+
+    int j, page, bit;
+
+    int page_start = y / 8;
+    int page_end = (y + size - 1) / 8; // Calculate the ending page based on the image height
+
+    for (page = page_start; page <= page_end; page++) {
+        for (j = 0; j < size; j++) { // Iterate over the width of the icon
+            DISPLAY_CHANGE_TO_COMMAND_MODE;
+
+            // Set page address
+            spi_send_recv(0xB0 | page);
+
+            // Set column address
+            spi_send_recv(0x00 | ((x + j) & 0x0F)); // Lower nibble
+            spi_send_recv(0x10 | ((x + j) >> 4)); // Upper nibble
+
+            DISPLAY_CHANGE_TO_DATA_MODE;
+
+            uint8_t dataByte = 0;
+            int bit_offset = y % 8;
+            for (bit = 0; bit < 8; bit++) {
+                int row = bit + page * 8 - y; // Calculate the row of the image data to use
+                if (row >= 0 && row < size && data[row][j]) {
+                    dataByte |= (1 << bit);
+                }
+            }
+
+            spi_send_recv(0x00);
+        }
+    }
+}
+
+
 /*
 -------------------
 Border Collision (128x32)
