@@ -1,0 +1,4 @@
+kanske något sådant här för fiender
+
+man skulle kunna byta mellan dem varje gång de flyttar sig ett steg och 
+vända på dem beroende på om den åker höger eller vänster
