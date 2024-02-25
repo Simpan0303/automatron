@@ -60,6 +60,7 @@ void time2string( char *, int );
 extern const uint8_t filled_square[][5];
 extern const uint8_t bullet[][2];
 extern const uint8_t enemy[][3];
+const uint8_t rolig-figur[][5];
 
 unsigned int getbtns(void);
 unsigned int getbtn1(void);
