@@ -156,6 +156,7 @@ const uint8_t const screen[] = {
 /*
 Base shape for player object
 By: Simon Svanberg
+rolig-figur added by: Isak Erikson Winbäck
 */
 
 // Test Entity
@@ -178,6 +179,14 @@ const uint8_t enemy[][3] = {
 	{1, 1, 1},
 	{1, 1, 1},
 	{1, 1, 1}
+};
+
+const uint8_t rolig-figur[][5] = {
+    {0, 0, 1, 0, 0},
+    {0, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1},
+    {0, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0}
 };
 
 

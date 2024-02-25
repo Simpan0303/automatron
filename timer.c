@@ -156,6 +156,17 @@ void render_bullets() {
     }
   }
 }
+void render_fiende() {                                                                                              //bara för 1 fiende eftersom den är för ett test
+    if(fiendekoordinat[2][0]==1)
+    {
+            display_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, rolig-figur); // Draw the "rolig-figur"
+    }
+     else
+    {
+        clear_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, rolig-figur); // Clear the "rolig-figur"
+    }
+  
+}
 
 // ---------  ABOVE WILL BE MOVED TO ANOTHER FILE ------------
 
@@ -245,7 +256,7 @@ void update_mainCharacter() {
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
 void update_bullet(Bullet* bullet);
-void game_loop(void) {
+void game_loop(void) {                                                                                                                                                                  //själva viktiga delen där metoder kan användas
     // Game speed
     if (IFS(0) & 0x100) {
         IFSCLR(0) = 0x100;
@@ -254,6 +265,8 @@ void game_loop(void) {
 
         if (timeoutcount >= 0) {
             timeoutcount = 0;
+            if(lost==0)
+            {
             //clear_display();
             border_collision_bullet();
 
@@ -264,9 +277,10 @@ void game_loop(void) {
             update_mainCharacter(); // Move the main character
 
             // Update bullets
-            for (int i = 0; i < MAX_BULLETS; i++) {
+            for (int i = 0; i < MAX_BULLETS; i++) {                 
                 if (bullets[i].active) {
                     update_bullet(&bullets[i]);
+                    kulfärd(i);
                 }
             }
 
@@ -277,6 +291,7 @@ void game_loop(void) {
                 int middle_y = y_mainCharacter;
 
                 spawn_bullet(middle_x, middle_y, x_speed, y_speed);
+                spawnakula();
                 bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
             }
             
@@ -295,6 +310,26 @@ void game_loop(void) {
             // spawn_enemy(10, 10); // Draw the enemy
 
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
+            skada();
+            //test av att spawna fiender
+            if(fiendekoordinat[2][0]==NULL)
+            {
+                spawnafiender(1);               //ska ändra till kanske score++ sen när testad på chipkit
+            }
+            fiendemanövrering(0);
+            render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
+            }
+            //själva menyn |
+            //             v
+            else
+            {
+                for(int gsdfihjask=0;gsdfihjask<=30;gsdfihjask++)   
+                {
+                    //denna konstiga delay är för att testa så att man kan komma till huvudmenyn när vi sedan skapar den, den har 30 som temporärt värde av någon anledning
+                }
+                clearkulor(0);
+                lost=0;
+            }
         }
     }
 }

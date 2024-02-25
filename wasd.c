@@ -6,7 +6,9 @@
 
 int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
 int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
-int fiendekoordinat[2][1];    //fiendes koordinater
+int fiendekoordinat[3][1];    //fiendes koordinater, fiendekoordinat[0][i]=x, fiendekoordinat[1][i]=y, fiendekoordinat[2][i]=(NULL, 1 eller 2 där 1: vänster och 2: höger, NULL innebär att fienden är död och skulle då kunna återanvändas)
+bool lost=0;                  //0 betyder att man lever och 1 att spelet är förlorat och att man bör gå vara i menyn
+int score=0;                  //highscore som sedan ska sparas
 
 // C har inte public
 
@@ -23,7 +25,8 @@ höjd: 32
 -------------------
 Button Inputs
 By: Isak Erikson Winbäck
-Modified by: Simon Svanberg
+Modified by: Simon Svanberg 
+modifieringen gäller bara ändringar av tex: 4 till 0x4 av någon anledning samt av spaktryck så att den använder en klass i stället för kula[][]
 */
 
 // bit1 == bit2 is not valid in C. Use bit1 & bit2 instead.
@@ -93,16 +96,15 @@ void spaktryck(int* x_speed, int* y_speed) {
     
 }
 
-// Bullet spawn? Idk, den måste iaf ritas med display_image
+// Bullet spawn? Idk, den måste iaf ritas med display_image                                   //jag ser ingen anledning till varför det någonsin skulle göras här?
 /*
 void bullet_spawn() {
     display_image(bullet_x, bullet_y, 5, filled_square);
 }
 */
 
-// void border_collision() {
-/*
-    }
+/void spawnakula() 
+{
     if(12==getsw())
     {
         //vänster-upp
@@ -131,13 +133,13 @@ void bullet_spawn() {
     {
         //gevär förblir som det var
     }
-}
-*/
+  }
 
-void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta,       timer för hastighet av skott
+
+void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
 {
     int i=0;
-    while(kula[0][i]!=0)
+    while(kula[0][i]!=NULL)
     {
       i++;
       //tar bara reda på hur mycket kulor som finns
@@ -148,9 +150,9 @@ void avfyrametod(int riktning,int x,int y)                                      
   
 }
 
-/*
 
-void kulfärd(int vilkenkula)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas
+
+void kulfärd(int vilkenkula)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas, fungerar men av någon anledning ville min kamrat inte använda den och skapar i stället en klass vilket är bra men mer ineffektivt
 {
   int x=kula[0][vilkenkula];
   int y=kula[1][vilkenkula];
@@ -200,9 +202,50 @@ void fiendemanövrering(int fiendenummer)              //flyttar fiende mot spel
   }
 }
 
-void skada()                                        //ska se om spelare och fiender tar skada
+void skada()                                        //ska se om spelare och fiender tar skada,   3 AE runt x och y som preliminärt värde då både fiende och spelare är 5 nu och det borde betyda att pixeln som snuddar dem också är en träff
 {
+  for(int i=0;fiendekoordinat[o][i]!=NULL;i++)
+  {
+    if(x_mainCharacter-fiendekoordinat[o][i]*x_mainCharacter-fiendekoordinat[o][i]<=9 && y_mainCharacter-fiendekoordinat[1][i]*y_mainCharacter-fiendekoordinat[1][i]<=9)
+      {
+        lost=1;
+      }
+      for(int i2=0;kula[0][i2]!=NULL)
+      {
+      if(kula[0][i2]-fiendekoordinat[0][i]*kula[0][i2]-fiendekoordinat[0][i]<=9 && kula[1][i2]-fiendekoordinat[1][i]*kula[1][i2]-fiendekoordinat[1][i]<=9)
+        {
+          fiendekoordinat[0][i]=100000;   //100000 är bara ett värde utanför skärmen då den här funktionen antar att det kan hanteras (det borde defenitivt hanteras annnars), om den kan ta sig från det till skärmen innan den ersätts bör den förtjäna att återupplivas
+          fiendekoordinat[1][i]=100000;
+          fiendekoordinat[2][i]=NULL;     //visar att en ny fiende kan skapas här
+          score++;                        //score går upp för varje dödad fiende
+        }
+      }
+  }
 
+}
+
+void clearkulor(int o)        //tar bort alla kulor från och med o
+{
+  for(int i2=o;kula[0][i2]!=NULL)
+      {
+        kula[0][i2]=NULL;
+      }
+}
+
+void spawnafiender(int antal)
+{
+  int i=0;
+  while (i<=antal)
+  {
+    int b=0;
+    while(fiendekoordinat[2][b]!=NULL)
+    {
+      //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
+    }
+    fiendekoordinat[2][b]=1       //ska vara 1                          //jag vet inte om det finns en random funktion men jag skapar en egen annars
+    fiendekoordinat[1][b]=1       //ska vara random men 1 för test
+    fiendekoordinat[0][b]=1       //ska vara random men 1 för test
+  }
 }
 
 
