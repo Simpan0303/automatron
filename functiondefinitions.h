@@ -70,7 +70,7 @@ void enable_interrupt(void);
 void knapptryck(void);
 void spawnakula(void);
 void avfyrametod(int,int ,int);
-void kulfärd(int);
+void kulfard(int);
 void fiendemanovrering(int);
 void skada(void);
 void clearkulor(int);      //kanske inte helt nödvändig men vi får se

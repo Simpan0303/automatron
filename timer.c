@@ -280,7 +280,7 @@ void game_loop(void) {                                                          
             for (int i = 0; i < MAX_BULLETS; i++) {                 
                 if (bullets[i].active) {
                     update_bullet(&bullets[i]);
-                    kulfärd(i);
+                    kulfard(i);
                 }
             }
 

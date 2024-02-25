@@ -152,7 +152,7 @@ void avfyrametod(int riktning,int x,int y)                                      
 
 
 
-void kulfärd(int vilkenkula)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas, fungerar men av någon anledning ville min kamrat inte använda den och skapar i stället en klass vilket är bra men mer ineffektivt
+void kulfard(int vilkenkula)                                                        //metod för att kulor ska färdas i sina rikningar, eventuellt även för annat som ska förflyttas, fungerar men av någon anledning ville min kamrat inte använda den och skapar i stället en klass vilket är bra men mer ineffektivt
 {
   int x=kula[0][vilkenkula];
   int y=kula[1][vilkenkula];
