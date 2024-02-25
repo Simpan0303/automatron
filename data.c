@@ -181,7 +181,7 @@ const uint8_t enemy[][3] = {
 	{1, 1, 1}
 };
 
-const uint8_t rolig-figur[][5] = {
+const uint8_t roligfigur[][5] = {
     {0, 0, 1, 0, 0},
     {0, 1, 1, 1, 0},
     {1, 1, 1, 1, 1},

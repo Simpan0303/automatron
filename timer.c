@@ -159,11 +159,11 @@ void render_bullets() {
 void render_fiende() {                                                                                              //bara för 1 fiende eftersom den är för ett test
     if(fiendekoordinat[2][0]==1)
     {
-            display_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, rolig-figur); // Draw the "rolig-figur"
+            display_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, roligfigur); // Draw the "roligfigur"
     }
      else
     {
-        clear_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, rolig-figur); // Clear the "rolig-figur"
+        clear_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, roligfigur); // Clear the "roligfigur"
     }
   
 }
@@ -316,7 +316,7 @@ void game_loop(void) {                                                          
             {
                 spawnafiender(1);               //ska ändra till kanske score++ sen när testad på chipkit
             }
-            fiendemanövrering(0);
+            fiendemanovrering(0);
             render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
             }
             //själva menyn |

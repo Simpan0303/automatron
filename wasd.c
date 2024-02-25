@@ -5,8 +5,8 @@
 
 
 int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
-int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
-int fiendekoordinat[3][1];    //fiendes koordinater, fiendekoordinat[0][i]=x, fiendekoordinat[1][i]=y, fiendekoordinat[2][i]=(NULL, 1 eller 2 där 1: vänster och 2: höger, NULL innebär att fienden är död och skulle då kunna återanvändas)
+int kula[3][100];   //kula[0]==x, kula[1]==y, kula[2]==riktning
+int fiendekoordinat[3][100];    //fiendes koordinater, fiendekoordinat[0][i]=x, fiendekoordinat[1][i]=y, fiendekoordinat[2][i]=(NULL, 1 eller 2 där 1: vänster och 2: höger, NULL innebär att fienden är död och skulle då kunna återanvändas)
 bool lost=0;                  //0 betyder att man lever och 1 att spelet är förlorat och att man bör gå vara i menyn
 int score=0;                  //highscore som sedan ska sparas
 
@@ -103,7 +103,7 @@ void bullet_spawn() {
 }
 */
 
-/void spawnakula() 
+void spawnakula() 
 {
     if(12==getsw())
     {
@@ -139,14 +139,14 @@ void bullet_spawn() {
 void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
 {
     int i=0;
-    while(kula[0][i]!=NULL)
+    while(kula[0][i]!=0 || i<=100)
     {
       i++;
       //tar bara reda på hur mycket kulor som finns
     }
-    kula[0][i]=x;                   //spawnar kulan i spelaren
-    kula[1][i]=y;
-    kula[2][i]=riktning;
+    kula[0][i%100]=x;                   //spawnar kulan i spelaren
+    kula[1][i%100]=y;
+    kula[2][i%100]=riktning;
   
 }
 
@@ -182,7 +182,7 @@ void kulfärd(int vilkenkula)                                                   
 }
 
 
-void fiendemanövrering(int fiendenummer)              //flyttar fiende mot spelaren
+void fiendemanovrering(int fiendenummer)              //flyttar fiende mot spelaren
 {
   if(fiendekoordinat[0][fiendenummer]>x_mainCharacter)
   {
@@ -204,7 +204,7 @@ void fiendemanövrering(int fiendenummer)              //flyttar fiende mot spel
 
 void skada()                                        //ska se om spelare och fiender tar skada,   3 AE runt x och y som preliminärt värde då både fiende och spelare är 5 nu och det borde betyda att pixeln som snuddar dem också är en träff
 {
-  for(int i=0;fiendekoordinat[o][i]!=NULL;i++)
+  for(int i=0;i<=100;i++)
   {
     if(x_mainCharacter-fiendekoordinat[o][i]*x_mainCharacter-fiendekoordinat[o][i]<=9 && y_mainCharacter-fiendekoordinat[1][i]*y_mainCharacter-fiendekoordinat[1][i]<=9)
       {
@@ -238,13 +238,18 @@ void spawnafiender(int antal)
   while (i<=antal)
   {
     int b=0;
-    while(fiendekoordinat[2][b]!=NULL)
+    while(fiendekoordinat[2][b]!=NULL || b==100)
     {
       //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
+      b++;
     }
+    if(b!=100)
+    {
     fiendekoordinat[2][b]=1       //ska vara 1                          //jag vet inte om det finns en random funktion men jag skapar en egen annars
     fiendekoordinat[1][b]=1       //ska vara random men 1 för test
     fiendekoordinat[0][b]=1       //ska vara random men 1 för test
+    1++;
+  }
   }
 }
 
