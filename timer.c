@@ -312,12 +312,12 @@ void game_loop(void) {                                                          
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
             skada();
             //test av att spawna fiender
-            if(fiendekoordinat[2][0]==NULL)
+            if(fiendekoordinat[2][0]==0) // comparison with NULL not allowed
             {
                 spawnafiender(1);               //ska ändra till kanske score++ sen när testad på chipkit
             }
             fiendemanovrering(0);
-            render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
+            render_fiende();                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
             }
             //själva menyn |
             //             v

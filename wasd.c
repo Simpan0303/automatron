@@ -7,7 +7,10 @@
 int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
 int kula[3][100];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 int fiendekoordinat[3][100];    //fiendes koordinater, fiendekoordinat[0][i]=x, fiendekoordinat[1][i]=y, fiendekoordinat[2][i]=(NULL, 1 eller 2 där 1: vänster och 2: höger, NULL innebär att fienden är död och skulle då kunna återanvändas)
-bool lost=0;                  //0 betyder att man lever och 1 att spelet är förlorat och att man bör gå vara i menyn
+int lost=0; // bool lost=0;                  //0 betyder att man lever och 1 att spelet är förlorat och att man bör gå vara i menyn
+// bool is not in standard C. It is in stdbool.h.
+// But it is not needed here, as 0 is false and 1 is true in C.
+// Using bool dependent on stdbool introduces unneccessary dependencies.
 int score=0;                  //highscore som sedan ska sparas
 
 // C har inte public
@@ -109,25 +112,25 @@ void spawnakula()
     {
         //vänster-upp
         direction_gun=7;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     if(6==getsw())
     {
         //upphöger
         direction_gun=4;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     if(3==getsw())
     {
         //ned-höger
         direction_gun=5;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     if(9==getsw())
     {
         //ned-vänster
         direction_gun=6;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     else
     {
@@ -204,19 +207,20 @@ void fiendemanovrering(int fiendenummer)              //flyttar fiende mot spela
 
 void skada()                                        //ska se om spelare och fiender tar skada,   3 AE runt x och y som preliminärt värde då både fiende och spelare är 5 nu och det borde betyda att pixeln som snuddar dem också är en träff
 {
+  int o=0; // TEMPORARY FIX TO GET IT TO COMPILE
   for(int i=0;i<=100;i++)
   {
     if(x_mainCharacter-fiendekoordinat[o][i]*x_mainCharacter-fiendekoordinat[o][i]<=9 && y_mainCharacter-fiendekoordinat[1][i]*y_mainCharacter-fiendekoordinat[1][i]<=9)
       {
         lost=1;
       }
-      for(int i2=0;kula[0][i2]!=NULL)
+      for(int i2=0;kula[0][i2]!=0;i2++)
       {
       if(kula[0][i2]-fiendekoordinat[0][i]*kula[0][i2]-fiendekoordinat[0][i]<=9 && kula[1][i2]-fiendekoordinat[1][i]*kula[1][i2]-fiendekoordinat[1][i]<=9)
         {
           fiendekoordinat[0][i]=100000;   //100000 är bara ett värde utanför skärmen då den här funktionen antar att det kan hanteras (det borde defenitivt hanteras annnars), om den kan ta sig från det till skärmen innan den ersätts bör den förtjäna att återupplivas
           fiendekoordinat[1][i]=100000;
-          fiendekoordinat[2][i]=NULL;     //visar att en ny fiende kan skapas här
+          fiendekoordinat[2][i]=0;     //visar att en ny fiende kan skapas här
           score++;                        //score går upp för varje dödad fiende
         }
       }
@@ -226,9 +230,9 @@ void skada()                                        //ska se om spelare och fien
 
 void clearkulor(int o)        //tar bort alla kulor från och med o
 {
-  for(int i2=o;kula[0][i2]!=NULL)
+  for(int i2=o;kula[0][i2]!=0;i2++)
       {
-        kula[0][i2]=NULL;
+        kula[0][i2]=0;
       }
 }
 
@@ -238,24 +242,24 @@ void spawnafiender(int antal)
   while (i<=antal)
   {
     int b=0;
-    while(fiendekoordinat[2][b]!=NULL || b==100)
+    while(fiendekoordinat[2][b]!=0 || b==100)
     {
       //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
       b++;
     }
     if(b!=100)
     {
-    fiendekoordinat[2][b]=1       //ska vara 1                          //jag vet inte om det finns en random funktion men jag skapar en egen annars
-    fiendekoordinat[1][b]=1       //ska vara random men 1 för test
-    fiendekoordinat[0][b]=1       //ska vara random men 1 för test
-    1++;
+    fiendekoordinat[2][b]=1;       //ska vara 1                          //jag vet inte om det finns en random funktion men jag skapar en egen annars
+    fiendekoordinat[1][b]=1;       //ska vara random men 1 för test
+    fiendekoordinat[0][b]=1;       //ska vara random men 1 för test
+    i++;
   }
   }
 }
 
 
 
-*/
+
 
 
 //det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();

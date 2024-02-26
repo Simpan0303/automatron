@@ -148,3 +148,5 @@ void spawn_enemy(int x, int y);
 void update_enemy();
 
 
+extern int fiendekoordinat[3][100];
+int lost;
