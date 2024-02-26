@@ -129,25 +129,25 @@ void spawnakula()
     {
         //vänster-upp
         direction_gun=7;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     if(6==getsw())
     {
         //upphöger
         direction_gun=4;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     if(3==getsw())
     {
         //ned-höger
         direction_gun=5;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     if(9==getsw())
     {
         //ned-vänster
         direction_gun=6;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
     else
     {
@@ -305,14 +305,14 @@ void spawnafiender(int antal)       //while(kula[0][i]!=1000 || i<=100)
     fiendekoordinat[1][b]=3;                        //spawnar fiender random till höger
     fiendekoordinat[0][b]=tillSynesrandom(28)+100;
     variabelTillRandom+=10;
-    1++;
+    i++;
   }
   }
 }
 
 
 
-*/
+
 
 
 //det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();
