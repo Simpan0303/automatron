@@ -159,7 +159,7 @@ int liteRandomVariabel=0;                                                       
 void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
 {
     int i=0;
-    while(kula[0][i]!=1000 && i<=100)
+    while(kula[0][i]!=1000 && i<100)
     {
       i++;
       //tar bara reda på hur mycket kulor som finns
@@ -169,7 +169,7 @@ void avfyrametod(int riktning,int x,int y)                                      
       i=0;
       if(liteRandomVariabel==0)
       {
-        for(int y=50;y<=100;y++)
+        for(int y=50;y<100;y++)
         {
           kula[0][y]=1000;
           kula[1][y]=1000;
@@ -259,7 +259,7 @@ int skada()                                        //ska se om spelare och fiend
         dogDen=0;
       }
     }
-  for(int i=0;i<=100;i++)
+  for(int i=0;i<100;i++)
   {
     if(x_mainCharacter-fiendekoordinat[0][i]*x_mainCharacter-fiendekoordinat[0][i]<=9 && y_mainCharacter-fiendekoordinat[1][i]*y_mainCharacter-fiendekoordinat[1][i]<=9)
       {
@@ -282,7 +282,7 @@ int skada()                                        //ska se om spelare och fiend
 
 void clearkulor(int o)        //tar bort alla kulor från och med o
 {
-  for(int i2=o;kula[0][i2]<=100;i2++)
+  for(int i2=o;kula[0][i2]<100;i2++)
       {
         kula[0][i2]=1000;
       }
@@ -294,7 +294,7 @@ void spawnafiender(int antal)       //while(kula[0][i]!=1000 || i<=100)
   while (i<=antal)
   {
     int b=0;
-    while(fiendekoordinat[2][b]!=1000 && b<=100)
+    while(fiendekoordinat[2][b]!=1000 && b<100)
     {
       //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
       b++;
