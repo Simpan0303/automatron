@@ -189,9 +189,11 @@ void avfyrametod(int riktning,int x,int y)                                      
       }
     }
     if(riktning<800)                //800 < 1000 därför ser den om kulan ej existerar
+    {
     kula[0][i]=x;                   //spawnar kulan i spelaren
     kula[1][i]=y;
     kula[2][i]=riktning;
+    }
   
 }
 
