@@ -320,13 +320,13 @@ void game_loop(void) {                                                          
                 spawnafiender(score++ % 3);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
             }
             fiendemanovrering(0);
-            render_fiende();                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
+            render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
             }
             //själva menyn |
             //             v
             else
             {
-                for(int gsdfihjask=0;gsdfihjask<=30;gsdfihjask++)   
+                for(int gsdfihjask=0;gsdfihjask<=1;gsdfihjask++)   
                 {
                     //denna konstiga delay är för att testa så att man kan komma till huvudmenyn när vi sedan skapar den, den har 30 som temporärt värde av någon anledning
                 }
