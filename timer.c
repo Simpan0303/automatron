@@ -283,8 +283,12 @@ void game_loop(void) {                                                          
             for (int i = 0; i < MAX_BULLETS; i++) {                 
                 if (bullets[i].active) {
                     update_bullet(&bullets[i]);
-                    kulfard(i);                                                             //flyttar kula
+                                                                                 //flyttar kula
                 }
+            }
+            for(int i=0; i<=100;i++)
+            {
+                kulfard(i);
             }
 
             // spawn bullet at mainCharacter position
@@ -317,9 +321,12 @@ void game_loop(void) {                                                          
             //test av att spawna fiender
             if(skada()==1)
             {
-                spawnafiender(score++ % 3);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
+                spawnafiender((score % 3)+1);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
             }
-            fiendemanovrering(0);
+            for(int f=0;f<=100;f++)
+            {
+                fiendemanovrering(0);
+            }
             render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
             }
             //själva menyn |
