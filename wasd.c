@@ -169,7 +169,7 @@ void avfyrametod(int riktning,int x,int y)                                      
       i=0;
       if(liteRandomVariabel==0)
       {
-        for(int y=50;y<=100)
+        for(int y=50;y<=100;y++)
         {
           kula[0][y]=1000;
           kula[1][y]=1000;
@@ -179,7 +179,7 @@ void avfyrametod(int riktning,int x,int y)                                      
       }
       else
       {
-        for(int y=0;y<=50)
+        for(int y=0;y<=50;y++)
         {
           kula[0][y]=1000;
           kula[1][y]=1000;
@@ -254,7 +254,7 @@ int skada()                                        //ska se om spelare och fiend
   int dogDen=1;
   for(int gggg=0;gggg<100;gggg++)                   //spawnar en fiende om ingen finns
     {
-      if(fiendekoordinat[0][gggg]!=1000;)
+      if(fiendekoordinat[0][gggg]!=1000)
       {
         dogDen=0;
       }
@@ -265,7 +265,7 @@ int skada()                                        //ska se om spelare och fiend
       {
         lost=1;
       }
-      for(int i2=0;kula[0][i2]!=1000)
+      for(int i2=0;kula[0][i2]!=1000;i2++)
       {
       if(kula[0][i2]-fiendekoordinat[0][i]*kula[0][i2]-fiendekoordinat[0][i]<=9 && kula[1][i2]-fiendekoordinat[1][i]*kula[1][i2]-fiendekoordinat[1][i]<=9)
         {
@@ -282,7 +282,7 @@ int skada()                                        //ska se om spelare och fiend
 
 void clearkulor(int o)        //tar bort alla kulor från och med o
 {
-  for(int i2=o;kula[0][i2]<=100)
+  for(int i2=o;kula[0][i2]<=100;i2++)
       {
         kula[0][i2]=1000;
       }
