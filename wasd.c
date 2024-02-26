@@ -159,7 +159,7 @@ int liteRandomVariabel=0;                                                       
 void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
 {
     int i=0;
-    while(kula[0][i]!=1000 || i<=100)
+    while(kula[0][i]!=1000 && i<=100)
     {
       i++;
       //tar bara reda på hur mycket kulor som finns
@@ -294,7 +294,7 @@ void spawnafiender(int antal)       //while(kula[0][i]!=1000 || i<=100)
   while (i<=antal)
   {
     int b=0;
-    while(fiendekoordinat[2][b]!=1000 || b==100)
+    while(fiendekoordinat[2][b]!=1000 && b<=100)
     {
       //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
       b++;
