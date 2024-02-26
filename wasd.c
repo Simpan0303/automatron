@@ -99,13 +99,73 @@ void spaktryck(int* x_speed, int* y_speed) {
     
 }
 
-// Bullet spawn? Idk, den måste iaf ritas med display_image                                   //jag ser ingen anledning till varför det någonsin skulle göras här?
-/*
-void bullet_spawn() {
-    display_image(bullet_x, bullet_y, 5, filled_square);
+// avfyrametod sets x and y of bullet to the position of the player
+// and sets the direction of the bullet to the direction of the player
+// i determines which bullet to spawn
+// when kula[0][i] == 1, the bullet is active
+void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
+{
+    int i=0;
+    while(kula[0][i]!=0 || i<=100)
+    {
+      i++;
+      //tar bara reda på hur mycket kulor som finns
+    }
+    kula[0][i%100]=x;                   //spawnar kulan i spelaren
+    kula[1][i%100]=y;
+    kula[2][i%100]=riktning;
+  
 }
-*/
 
+
+// spawnakula spawns a bullet using avfyrametod when a switch is activated
+void spawnakula() 
+{
+    int switches = getsw(); // call getsw once. Better performance.
+    if(12==switches) 
+    {
+        //vänster-upp
+        direction_gun=8;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if(6==switches) 
+    {
+        //upphöger
+        direction_gun=7;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if(3==switches) 
+    {
+        //ned-höger
+        direction_gun=6;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if(9==switches) 
+    {
+        //ned-vänster
+        direction_gun=5;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if(8==switches) 
+    {
+        //vänster
+        direction_gun=4;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if(4==switches) 
+    {
+        //upp
+        direction_gun=3;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if (2==switches) 
+    {
+        //ned
+        direction_gun=2;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    } else if (1==switches) 
+    {
+        //höger
+        direction_gun=1;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    }
+  }
+
+/*
 void spawnakula() 
 {
     if(12==getsw())
@@ -132,26 +192,25 @@ void spawnakula()
         direction_gun=6;
         avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
     }
+    if(8==getsw())
+    {
+        //vänster
+        direction_gun=3;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    }
+    if(4==getsw())
+    {
+        //upp
+        // direction_gun=0;
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+    }
     else
     {
         //gevär förblir som det var
     }
   }
+*/
 
-
-void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
-{
-    int i=0;
-    while(kula[0][i]!=0 || i<=100)
-    {
-      i++;
-      //tar bara reda på hur mycket kulor som finns
-    }
-    kula[0][i%100]=x;                   //spawnar kulan i spelaren
-    kula[1][i%100]=y;
-    kula[2][i%100]=riktning;
-  
-}
 
 
 
@@ -179,9 +238,35 @@ void kulfard(int vilkenkula)                                                    
       else
       {
         //inget antar jag, finns för om flera knappar trycks samtidigt
+
+        // EDGE DETECTION
+        // if it goes to screen edge, stop
+        // if it goes off screen, stop
+        if (x < 0) 
+        {
+            x = 0;
+            kula[2][vilkenkula] = 0;
+        } else if (x >= SCREEN_WIDTH) 
+        {
+            x = SCREEN_WIDTH - 1;
+            kula[2][vilkenkula] = 0;
+
+        }
+        if (y < 0) 
+        {
+            y = 0;
+            kula[2][vilkenkula] = 0;
+        } else if (y >= SCREEN_HEIGHT) 
+        {
+            y = SCREEN_HEIGHT - 1;
+            kula[2][vilkenkula] = 0;
+        }
       }
+
       kula[0][vilkenkula]=x;
       kula[1][vilkenkula]=y;
+
+
 }
 
 

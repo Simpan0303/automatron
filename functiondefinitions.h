@@ -149,4 +149,6 @@ void update_enemy();
 
 
 extern int fiendekoordinat[3][100];
-int lost;
+extern int lost;
+extern int kula[3][100];
+extern int bullet_fire_delay;
