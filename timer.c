@@ -142,39 +142,32 @@ void border_collision_bullet() {
 
 void render_bullets() {
   for (int i = 0; i < MAX_BULLETS; i++) {
-    if (kula[2][i] != 0) { // if active
-            display_image(kula[0][i], kula[1][i], 2, bullet); // Draw the bullet
-    } else {
-        clear_image(kula[0][i], kula[1][i], 2, bullet); // Clear the bullet
+    if (bullets[i].active) {
+        if (bullets[i].x != bullets[i].prev_x || bullets[i].y != bullets[i].prev_y) {
+            clear_image(bullets[i].prev_x, bullets[i].prev_y, 2, bullet); // Clear the bullet
+        }
+
+        display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
+        // Update the previous position variables
+        bullets[i].prev_x = bullets[i].x;
+        bullets[i].prev_y = bullets[i].y;
+    } else if (bullets[i].active == 0) {
+        clear_image(bullets[i].x, bullets[i].y, 2, bullet); // Clear the bullet
     }
   }
 }
-
-
-int prev_x_fiende = 0;
-int prev_y_fiende = 0;
-
-void init_prev_coordinates() {
-    prev_x_fiende = fiendekoordinat[0][0];
-    prev_y_fiende = fiendekoordinat[1][0];
-}
-void render_fiende() {       
-                                                                                           //bara för 1 fiende eftersom den är för ett test
-
-    if(fiendekoordinat[2][0]==1) // if active
+void render_fiende() {                                                                                              //bara för 1 fiende eftersom den är för ett test
+    for(int i=0;i<100;1++)
     {
-        if (fiendekoordinat[0][0] != prev_x_fiende || fiendekoordinat[1][0] != prev_y_fiende) {
-            clear_image(prev_x_fiende, prev_y_fiende, 5, roligfigur); // Clear the "roligfigur"
-            prev_x_fiende = fiendekoordinat[0][0];
-            prev_y_fiende = fiendekoordinat[1][0];
+        if(fiendekoordinat[2][i]==1)
+        {
+             display_image(fiendekoordinat[0][i], fiendekoordinat[1][i], 5, roligfigur); // Draw the "roligfigur"
         }
-        display_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, roligfigur); // Draw the "roligfigur"
+        else
+        {
+            clear_image(fiendekoordinat[0][i], fiendekoordinat[1][i], 5, roligfigur); // Clear the "roligfigur"
+        }
     }
-     else
-    {
-        clear_image(fiendekoordinat[0][0], fiendekoordinat[1][0], 5, roligfigur); // Clear the "roligfigur"
-    }
-  
 }
 
 // ---------  ABOVE WILL BE MOVED TO ANOTHER FILE ------------
@@ -254,7 +247,7 @@ void update_mainCharacter() {
         }
 
         // Draw the main character at the new position
-        // display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
+        display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
 
         // Update the previous position variables
         prev_x_mainCharacter = x_mainCharacter;
@@ -274,6 +267,7 @@ void game_loop(void) {                                                          
 
         if (timeoutcount >= 0) {
             timeoutcount = 0;
+            lost=1;
             if(lost==0)
             {
             //clear_display();
@@ -287,24 +281,22 @@ void game_loop(void) {                                                          
 
             // Update bullets
             for (int i = 0; i < MAX_BULLETS; i++) {                 
-                if (kula[2][i] != 0) {
-                    // update_bullet(&bullets[i]);
-                    //kulfard(i);
+                if (bullets[i].active) {
+                    update_bullet(&bullets[i]);
+                    kulfard(i);                                                             //flyttar kula
                 }
             }
-            kulfard(1);
 
             // spawn bullet at mainCharacter position
             if (bullet_fire_delay >= BULLET_FIRE_DELAY_MAX && should_fire_bullet) {
                 // Calculate the middle of the square
-                // int middle_x = x_mainCharacter;
-                // int middle_y = y_mainCharacter;
+                int middle_x = x_mainCharacter;
+                int middle_y = y_mainCharacter;
 
-                // spawn_bullet(middle_x, middle_y, x_speed, y_speed); // FELET ÄR HÄR
-                // spawnakula();
-                // bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
+                spawn_bullet(middle_x, middle_y, x_speed, y_speed);
+                spawnakula();
+                bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
             }
-            spawnakula();
             
             // display bullets
             render_bullets();
@@ -323,12 +315,12 @@ void game_loop(void) {                                                          
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
             skada();
             //test av att spawna fiender
-            if(fiendekoordinat[2][0]==0) // comparison with NULL not allowed
+            if(skada()==1)
             {
-                spawnafiender(1);               //ska ändra till kanske score++ sen när testad på chipkit
+                spawnafiender(score++ % 3);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
             }
             fiendemanovrering(0);
-            // render_fiende();                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
+            render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
             }
             //själva menyn |
             //             v
@@ -340,6 +332,7 @@ void game_loop(void) {                                                          
                 }
                 clearkulor(0);
                 lost=0;
+                initdetmesta();
             }
         }
     }

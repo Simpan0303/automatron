@@ -7,15 +7,29 @@
 int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
 int kula[3][100];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 int fiendekoordinat[3][100];    //fiendes koordinater, fiendekoordinat[0][i]=x, fiendekoordinat[1][i]=y, fiendekoordinat[2][i]=(NULL, 1 eller 2 där 1: vänster och 2: höger, NULL innebär att fienden är död och skulle då kunna återanvändas)
-int lost=0; // bool lost=0;                  //0 betyder att man lever och 1 att spelet är förlorat och att man bör gå vara i menyn
-// bool is not in standard C. It is in stdbool.h.
-// But it is not needed here, as 0 is false and 1 is true in C.
-// Using bool dependent on stdbool introduces unneccessary dependencies.
+int lost=0;                  //0 betyder att man lever och 1 att spelet är förlorat och att man bör gå vara i menyn
 int score=0;                  //highscore som sedan ska sparas
+int variabelTillRandom=76;    //variabel som förändras och sedan blir till synes random då den beror på input
 
 // C har inte public
 
+void initdetmesta()
+{
+  for(int i2=0;i2<=2;i2++)
+  {
+    for(int i=0;i<=99;i++)
+    {
+      kula[i2][i]=1000;
+      fiendekoordinat[i2][i]=1000;
+    }
+  }
+}
 
+int tillSynesrandom(int max)            //ger till synes random int mellan 0 och max
+{
+  variabelTillRandom=(variabelTillRandom % max);
+  return variabelTillRandom;
+}
 /*
 --display--
 bredd: 128
@@ -37,6 +51,7 @@ int x_mainCharacter=64;     //fixa till logisk start sen
 int y_mainCharacter=14;     //fixa till logisk start sen
 void knapptryck()
 {
+  variabelTillRandom++;
     int buttons = getbtns();
     int btn1 = getbtn1();
     if (0x4 & buttons) {      // Button 4 (mapped to RD11)
@@ -99,118 +114,83 @@ void spaktryck(int* x_speed, int* y_speed) {
     
 }
 
-// avfyrametod sets x and y of bullet to the position of the player
-// and sets the direction of the bullet to the direction of the player
-// i determines which bullet to spawn
-// when kula[0][i] == 1, the bullet is active
-void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
-{
-    int i=0;
-    while(kula[0][i]!=0 || i<=100)
-    {
-      i++;
-      //tar bara reda på hur mycket kulor som finns
-    }
-    kula[0][i%100]=x;                   //spawnar kulan i spelaren
-    kula[1][i%100]=y;
-    kula[2][i%100]=riktning;
-  
-}
-
-
-// spawnakula spawns a bullet using avfyrametod when a switch is activated
-void spawnakula() 
-{
-    int switches = getsw(); // call getsw once. Better performance.
-    if(12==switches) 
-    {
-        //vänster-upp
-        direction_gun=8;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if(6==switches) 
-    {
-        //upphöger
-        direction_gun=7;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if(3==switches) 
-    {
-        //ned-höger
-        direction_gun=6;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if(9==switches) 
-    {
-        //ned-vänster
-        direction_gun=5;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if(8==switches) 
-    {
-        //vänster
-        direction_gun=4;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if(4==switches) 
-    {
-        //upp
-        direction_gun=3;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if (2==switches) 
-    {
-        //ned
-        direction_gun=2;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    } else if (1==switches) 
-    {
-        //höger
-        direction_gun=1;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    }
-  }
-
+// Bullet spawn? Idk, den måste iaf ritas med display_image                                   //jag ser ingen anledning till varför det någonsin skulle göras här?
 /*
+void bullet_spawn() {
+    display_image(bullet_x, bullet_y, 5, filled_square);
+}
+*/
+
 void spawnakula() 
 {
     if(12==getsw())
     {
         //vänster-upp
         direction_gun=7;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     if(6==getsw())
     {
         //upphöger
         direction_gun=4;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     if(3==getsw())
     {
         //ned-höger
         direction_gun=5;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     if(9==getsw())
     {
         //ned-vänster
         direction_gun=6;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    }
-    if(8==getsw())
-    {
-        //vänster
-        direction_gun=3;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
-    }
-    if(4==getsw())
-    {
-        //upp
-        // direction_gun=0;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     else
     {
         //gevär förblir som det var
     }
   }
-*/
 
+int liteRandomVariabel=0;                                                            //en variabel som visar vilken kula som avfyrades sist
+void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
+{
+    int i=0;
+    while(kula[0][i]!=1000 || i<=100)
+    {
+      i++;
+      //tar bara reda på hur mycket kulor som finns
+    }
+    if(i>100)
+    {
+      i=0;
+      if(liteRandomVariabel==0)
+      {
+        for(int y=50;y<=100)
+        {
+          kula[0][y]=1000;
+          kula[1][y]=1000;
+          kula[2][y]=1000;
+          liteRandomVariabel=1;
+        }
+      }
+      else
+      {
+        for(int y=0;y<=50)
+        {
+          kula[0][y]=1000;
+          kula[1][y]=1000;
+          kula[2][y]=1000;
+          liteRandomVariabel=0;
+        }
+      }
+    }
+    kula[0][i]=x;                   //spawnar kulan i spelaren
+    kula[1][i]=y;
+    kula[2][i]=riktning;
+  
+}
 
 
 
@@ -238,35 +218,9 @@ void kulfard(int vilkenkula)                                                    
       else
       {
         //inget antar jag, finns för om flera knappar trycks samtidigt
-
-        // EDGE DETECTION
-        // if it goes to screen edge, stop
-        // if it goes off screen, stop
-        if (x < 0) 
-        {
-            x = 0;
-            kula[2][vilkenkula] = 0;
-        } else if (x >= SCREEN_WIDTH) 
-        {
-            x = SCREEN_WIDTH - 1;
-            kula[2][vilkenkula] = 0;
-
-        }
-        if (y < 0) 
-        {
-            y = 0;
-            kula[2][vilkenkula] = 0;
-        } else if (y >= SCREEN_HEIGHT) 
-        {
-            y = SCREEN_HEIGHT - 1;
-            kula[2][vilkenkula] = 0;
-        }
       }
-
       kula[0][vilkenkula]=x;
       kula[1][vilkenkula]=y;
-
-
 }
 
 
@@ -290,61 +244,70 @@ void fiendemanovrering(int fiendenummer)              //flyttar fiende mot spela
   }
 }
 
-void skada()                                        //ska se om spelare och fiender tar skada,   3 AE runt x och y som preliminärt värde då både fiende och spelare är 5 nu och det borde betyda att pixeln som snuddar dem också är en träff
+int skada()                                        //ska se om spelare och fiender tar skada,   3 AE runt x och y som preliminärt värde då både fiende och spelare är 5 nu och det borde betyda att pixeln som snuddar dem också är en träff
 {
-  int o=0; // TEMPORARY FIX TO GET IT TO COMPILE
+  int dogDen=1;
+  for(int gggg=0;gggg<100;gggg++)                   //spawnar en fiende om ingen finns
+    {
+      if(fiendekoordinat[0][gggg]!=1000;)
+      {
+        dogDen=0;
+      }
+    }
   for(int i=0;i<=100;i++)
   {
-    if(x_mainCharacter-fiendekoordinat[o][i]*x_mainCharacter-fiendekoordinat[o][i]<=9 && y_mainCharacter-fiendekoordinat[1][i]*y_mainCharacter-fiendekoordinat[1][i]<=9)
+    if(x_mainCharacter-fiendekoordinat[0][i]*x_mainCharacter-fiendekoordinat[0][i]<=9 && y_mainCharacter-fiendekoordinat[1][i]*y_mainCharacter-fiendekoordinat[1][i]<=9)
       {
         lost=1;
       }
-      for(int i2=0;kula[0][i2]!=0;i2++)
+      for(int i2=0;kula[0][i2]!=NULL)
       {
       if(kula[0][i2]-fiendekoordinat[0][i]*kula[0][i2]-fiendekoordinat[0][i]<=9 && kula[1][i2]-fiendekoordinat[1][i]*kula[1][i2]-fiendekoordinat[1][i]<=9)
         {
-          fiendekoordinat[0][i]=100000;   //100000 är bara ett värde utanför skärmen då den här funktionen antar att det kan hanteras (det borde defenitivt hanteras annnars), om den kan ta sig från det till skärmen innan den ersätts bör den förtjäna att återupplivas
-          fiendekoordinat[1][i]=100000;
-          fiendekoordinat[2][i]=0;     //visar att en ny fiende kan skapas här
+          fiendekoordinat[0][i]=1000;   //1000 är bara ett värde utanför skärmen då den här funktionen antar att det kan hanteras (det borde defenitivt hanteras annnars), om den kan ta sig från det till skärmen innan den ersätts bör den förtjäna att återupplivas
+          fiendekoordinat[1][i]=1000;
+          fiendekoordinat[2][i]=1000;     //visar att en ny fiende kan skapas här
           score++;                        //score går upp för varje dödad fiende
+          dogDen=1;
         }
       }
   }
-
+  return dogDen;
 }
 
 void clearkulor(int o)        //tar bort alla kulor från och med o
 {
-  for(int i2=o;kula[0][i2]!=0;i2++)
+  for(int i2=o;kula[0][i2]<=100)
       {
-        kula[0][i2]=0;
+        kula[0][i2]=1000;
       }
 }
 
-void spawnafiender(int antal)
+void spawnafiender(int antal)       //while(kula[0][i]!=1000 || i<=100)
 {
   int i=0;
   while (i<=antal)
   {
     int b=0;
-    while(fiendekoordinat[2][b]!=0 || b==100)
+    while(fiendekoordinat[2][b]!=1000 || b==100)
     {
       //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
       b++;
     }
-    if(b!=100)
+    if(b!=101)                    //spawnar ej nya om det på något vis finns 100
     {
-    fiendekoordinat[2][b]=1;       //ska vara 1                          //jag vet inte om det finns en random funktion men jag skapar en egen annars
-    fiendekoordinat[1][b]=1;       //ska vara random men 1 för test
-    fiendekoordinat[0][b]=1;       //ska vara random men 1 för test
-    i++;
+    fiendekoordinat[2][b]=1       //ska vara 1                         
+    fiendekoordinat[1][b]=3;                        //spawnar fiender random på botten
+    fiendekoordinat[0][b]=tillSynesrandom(128);
+    variabelTillRandom+=10;
+    1++;
   }
   }
 }
 
 
 
-
+*/
 
 
 //det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();
