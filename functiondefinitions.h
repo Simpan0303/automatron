@@ -60,7 +60,6 @@ void time2string( char *, int );
 extern const uint8_t filled_square[][5];
 extern const uint8_t bullet[][2];
 extern const uint8_t enemy[][3];
-extern const uint8_t roligfigur[][5];
 
 unsigned int getbtns(void);
 unsigned int getbtn1(void);
@@ -68,13 +67,6 @@ int getsw(void);
 void enable_interrupt(void);
 
 void knapptryck(void);
-void spawnakula(void);
-void avfyrametod(int,int ,int);
-void kulfard(int);
-void fiendemanovrering(int);
-int skada(void);
-void clearkulor(int);      //kanske inte helt nödvändig men vi får se
-void spawnafiender(int);
 
 #define STATE_DRAW 0
 #define STATE_CLEAR 1
@@ -97,15 +89,17 @@ void border_collision(void);
 #define DIRECTION_RIGHT 1
 #define DIRECTION_LEFT -1
 
-typedef struct {
-    int x;
-    int y;
-    int prev_x;
-    int prev_y;
+extern int bullet_direction;
 
-    int active;
-    int x_speed;  // Speed in the x direction
-    int y_speed;  // Speed in the y direction
+typedef struct {
+   int x;
+   int y;
+   int prev_x;
+   int prev_y;
+
+   int active;
+   int x_speed;  // Speed in the x direction
+   int y_speed;  // Speed in the y direction
 } Bullet;
 
 void spawn_bullet(int x, int y, int x_speed, int y_speed);
@@ -125,7 +119,7 @@ void update_bullets(Bullet* bullet);
 
 #define BULLET_SPEED 2
 #define BULLET_WIDTH 2
-#define MAX_BULLETS 10
+#define MAX_BULLETS 100 // arbitrary large number
 #define BULLET_FIRE_DELAY_MAX 5
 
 
@@ -137,21 +131,17 @@ extern int bullet_direction;
 // Enemy logic
 #define MAX_ENEMIES 1
 typedef struct {
-    int x;
-    int y;
-    int active;
-    int x_speed;  // Speed in the x direction
-    int y_speed;  // Speed in the y direction
+   int x;
+   int y;
+   int prev_x;
+   int prev_y;
+
+   int active;
+   int x_speed;  // Speed in the x direction
+   int y_speed;  // Speed in the y direction
 } Enemy;
 
 void spawn_enemy(int x, int y);
 void update_enemy();
 
 
-extern int fiendekoordinat[3][100];
-extern int lost;
-extern int kula[3][100];
-extern int bullet_fire_delay;
-extern int score;
-void initdetmesta(void);
-extern int is_dead;

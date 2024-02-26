@@ -100,16 +100,16 @@ void init_bullets() {
     }
 }
 
-int x_speed = 0;
-int y_speed = 0;
-void spawn_bullet(int x, int y, int x_speed, int y_speed) {
+int x_speed_bullet = 0;
+int y_speed_bullet = 0;
+void spawn_bullet(int x, int y, int x_speed_bullet, int y_speed_bullet) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (!bullets[i].active) {
             bullets[i].x = x;
             bullets[i].y = y_mainCharacter;
             bullets[i].active = 1;
-            bullets[i].x_speed = x_speed;
-            bullets[i].y_speed = y_speed;
+            bullets[i].x_speed = x_speed_bullet;
+            bullets[i].y_speed = y_speed_bullet;
             break;
         }
     }
@@ -133,7 +133,7 @@ void update_bullet(Bullet* bullet) {
 
 void border_collision_bullet() {
     for (int i = 0; i < MAX_BULLETS; i++) {
-            if (bullets[i].x < 0 || bullets[i].x > SCREEN_WIDTH - 2 || bullets[i].y < 0 || bullets[i].y > SCREEN_HEIGHT - 1) {
+            if (bullets[i].x <= 0 || bullets[i].x >= SCREEN_WIDTH - 2 || bullets[i].y <= 0 || bullets[i].y >= SCREEN_HEIGHT - 2) {
                 bullets[i].active = 0;
             }
     }
@@ -141,31 +141,27 @@ void border_collision_bullet() {
 
 
 void render_bullets() {
-  for (int i = 0; i < MAX_BULLETS; i++) {
-    if (bullets[i].active) {
-        if (bullets[i].x != bullets[i].prev_x || bullets[i].y != bullets[i].prev_y) {
-            clear_image(bullets[i].prev_x, bullets[i].prev_y, 2, bullet); // Clear the bullet
-        }
+    int main_character_size = 5;
+    for (int i = 0; i < MAX_BULLETS; i++) {
+        if (bullets[i].active) {
+            if (bullets[i].x != bullets[i].prev_x || bullets[i].y != bullets[i].prev_y) {
+                clear_image(bullets[i].prev_x, bullets[i].prev_y, 2, bullet); // Clear the bullet
+            }
 
-        display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
-        // Update the previous position variables
-        bullets[i].prev_x = bullets[i].x;
-        bullets[i].prev_y = bullets[i].y;
-    } else if (bullets[i].active == 0) {
-        clear_image(bullets[i].x, bullets[i].y, 2, bullet); // Clear the bullet
-    }
-  }
-}
-void render_fiende() {                                                                                              //bara för 1 fiende eftersom den är för ett test
-    for(int i=0;i<100;i++)
-    {
-        if(fiendekoordinat[2][i]==1)
-        {
-             display_image(fiendekoordinat[0][i], fiendekoordinat[1][i], 5, roligfigur); // Draw the "roligfigur"
-        }
-        else
-        {
-            clear_image(fiendekoordinat[0][i], fiendekoordinat[1][i], 5, roligfigur); // Clear the "roligfigur"
+            // if mainCharacter fires left, bullet should spawn to the left of mainCharacter by 5 pixels
+
+            // if mainCharacter fires right, bullet should spawn to the right of mainCharacter by 5 pixels
+
+            // if mainCharacter fires up, bullet should spawn above mainCharacter by 5 pixels
+
+            // if mainCharacter fires down, bullet should spawn below mainCharacter by 5 pixels
+
+            display_image(bullets[i].x, bullets[i].y, 2, bullet); // Draw the bullet
+            // Update the previous position variables
+            bullets[i].prev_x = bullets[i].x;
+            bullets[i].prev_y = bullets[i].y;
+        } else if ((bullets[i].active == 0) && (bullets[i].x != x_mainCharacter || bullets[i].y != y_mainCharacter)) {
+            clear_image(bullets[i].x, bullets[i].y, 2, bullet); // Clear the bullet
         }
     }
 }
@@ -176,7 +172,7 @@ void render_fiende() {                                                          
 
 // Enemy init
 Enemy enemies[MAX_ENEMIES];
-int num_enemies = 0; // Number of active enemies
+// MAX_ENEMIES might be replaced by int num_enemies; in the future
 
 void init_enemies() {
     for (int i = 0; i < MAX_ENEMIES; i++) {
@@ -187,27 +183,54 @@ void init_enemies() {
 // spawn enemy at fixed position
 // move enemy towards mainCharacter x and y position
 // if enemy collides with mainCharacter, game over
-// if enemy collides with bullet, enemy dies
+// if enemy collides with bullet, enemy dies'
+
+int x_speed_enemy = 0;
+int y_speed_enemy = 0;
 void spawn_enemy(int x, int y) {
-    for (int i = 0; i < MAX_BULLETS; i++) {
-        if (!enemies[num_enemies].active) {
-            enemies[num_enemies].x = x;
-            enemies[num_enemies].y = y;
-            enemies[num_enemies].active = 1;
-            enemies[num_enemies].x_speed = x_speed;
-            enemies[num_enemies].y_speed = y_speed;
-            display_image(enemies[num_enemies].x, enemies[num_enemies].y, 3, enemy); // Draw the enemy
-            num_enemies++;
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        if (!enemies[i].active) {
+            enemies[i].x = x;
+            enemies[i].y = y;
+            enemies[i].active = 1;
+            enemies[i].x_speed = x_speed_enemy;
+            enemies[i].y_speed = y_speed_enemy;
             break;
         }
     }
 }
 
 
-void update_enemy() {
+// update enemy
+void update_enemy(Enemy* enemy) {
+    // Previous position
+    enemy->prev_x = enemy->x;
+    enemy->prev_y = enemy->y;
 
-    // Update all active enemies
-    for (int i = 0; i < num_enemies; i++) {
+    // New position
+    enemy->x += enemy->x_speed;
+    enemy->y += enemy->y_speed;
+
+    // Deactivate the enemy if it goes off screen - pretty much redundant
+    if (enemy->x < 0 || enemy->x > SCREEN_WIDTH - 2 || enemy->y < 0 || enemy->y > SCREEN_HEIGHT - 1) {
+        enemy->active = 0;
+    }
+
+    // Deactivate the enemy if it collides with the mainCharacter
+    if (enemy->x == x_mainCharacter && enemy->y == y_mainCharacter) {
+        enemy->active = 0;
+        // Game over
+    }
+
+    // Deactivate the enemy if it collides with a bullet
+    for (int i = 0; i < MAX_BULLETS; i++) {
+        if (bullets[i].active && bullets[i].x == enemy->x && bullets[i].y == enemy->y) {
+            enemy->active = 0;
+        }
+    }
+
+    // Update all active enemies movement
+    for (int i = 0; i < MAX_ENEMIES; i++) {
         if (enemies[i].active) {
             // Move the enemy towards the mainCharacter
             if (x_mainCharacter > enemies[i].x) {
@@ -220,10 +243,23 @@ void update_enemy() {
             } else if (y_mainCharacter < enemies[i].y) {
                 enemies[i].y--;
             }
+        }
+    }
+}
 
+void render_enemies() {
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        if (enemies[i].active) {
+            // Clear the image at the previous position if the character has moved
+            if (enemies[i].x != enemies[i].prev_x || enemies[i].y != enemies[i].prev_y) {
+                clear_image(enemies[i].prev_x, enemies[i].prev_y, 3, enemy); // Clear the enemy
+            }
+            display_image(enemies[i].x, enemies[i].y, 3, enemy); // Draw the enemy
+            // Update the previous position variables
+            enemies[i].prev_x = enemies[i].x;
+            enemies[i].prev_y = enemies[i].y;
+        } else if (enemies[i].active == 0) {
             clear_image(enemies[i].x, enemies[i].y, 3, enemy); // Clear the enemy
-
-            display_image(enemies[i].x, enemies[i].y, 3, enemy);
         }
     }
 }
@@ -235,16 +271,15 @@ void update_enemy() {
 // --------- MAIN CHARACTER LOGIC BELOW ------------
 int mainCharacterState = STATE_DRAW;
 // update mainCharacter
+int prev_x_mainCharacter = 0;
+int prev_y_mainCharacter = 0;
 void update_mainCharacter() {
-    // Define previous position variables at a global scope
-    int prev_x_mainCharacter = x_mainCharacter;
-    int prev_y_mainCharacter = y_mainCharacter;
     knapptryck();
     if (mainCharacterState == STATE_DRAW) {
-        // Clear the image at the previous position if the character has moved
         if (x_mainCharacter != prev_x_mainCharacter || y_mainCharacter != prev_y_mainCharacter) {
-            clear_image(prev_x_mainCharacter, prev_y_mainCharacter, 5, filled_square);
+            clear_image(prev_x_mainCharacter, prev_y_mainCharacter, 5, filled_square); // Clear the image at the previous position
         }
+        
 
         // Draw the main character at the new position
         display_image(x_mainCharacter, y_mainCharacter, 5, filled_square);
@@ -252,13 +287,16 @@ void update_mainCharacter() {
         // Update the previous position variables
         prev_x_mainCharacter = x_mainCharacter;
         prev_y_mainCharacter = y_mainCharacter;
+    } else if (mainCharacterState == STATE_CLEAR) {
+        // Clear the image at the previous position
+        clear_image(prev_x_mainCharacter, prev_y_mainCharacter, 5, filled_square);
     }
 }
 
 
 #define BULLET_FIRE_DELAY_MAX 5  // Decrease this value to make bullets spawn faster
 void update_bullet(Bullet* bullet);
-void game_loop(void) {                                                                                                                                                                  //själva viktiga delen där metoder kan användas
+void game_loop(void) {
     // Game speed
     if (IFS(0) & 0x100) {
         IFSCLR(0) = 0x100;
@@ -267,28 +305,20 @@ void game_loop(void) {                                                          
 
         if (timeoutcount >= 0) {
             timeoutcount = 0;
-            lost=1;
-            if(lost==0)
-            {
             //clear_display();
             border_collision_bullet();
 
 
             // inputs
-            spaktryck(&x_speed, &y_speed);
+            spaktryck(&x_speed_bullet, &y_speed_bullet);
             
             update_mainCharacter(); // Move the main character
 
             // Update bullets
-            for (int i = 0; i < MAX_BULLETS; i++) {                 
+            for (int i = 0; i < MAX_BULLETS; i++) {
                 if (bullets[i].active) {
                     update_bullet(&bullets[i]);
-                                                                                 //flyttar kula
                 }
-            }
-            for(int i=0; i<100;i++)
-            {
-                kulfard(i);
             }
 
             // spawn bullet at mainCharacter position
@@ -297,8 +327,7 @@ void game_loop(void) {                                                          
                 int middle_x = x_mainCharacter;
                 int middle_y = y_mainCharacter;
 
-                spawn_bullet(middle_x, middle_y, x_speed, y_speed);
-                spawnakula();
+                spawn_bullet(middle_x, middle_y, x_speed_bullet, y_speed_bullet);
                 bullet_fire_delay = 0;  // Reset the delay counter after firing a bullet
             }
             
@@ -309,38 +338,16 @@ void game_loop(void) {                                                          
             // collisions
             border_collision();
 
-            // clear_image(x_mainCharacter, y_mainCharacter, 5, enemy); // Clear the enemy
-
-            // display_image(x_mainCharacter, y_mainCharacter, 5, filled_square); // Draw the main character
-
-            // update_enemy(); // Move the enemy
-            // spawn_enemy(10, 10); // Draw the enemy
+            spawn_enemy(10, 10); // Draw the enemy
+            // Update enemies
+            for (int i = 0; i < MAX_ENEMIES; i++) {
+                if (enemies[i].active) {
+                    update_enemy(&enemies[i]); // Move the enemy
+                }
+            }
+            render_enemies();
 
             bullet_fire_delay++;  // Increment the delay counter at the end of the game loop
-            skada();
-            //test av att spawna fiender
-            if(skada()==1)
-            {
-                spawnafiender((score % 3)+1);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
-            }
-            for(int f=0;f<100;f++)
-            {
-                fiendemanovrering(0);
-            }
-            render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
-            }
-            //själva menyn |
-            //             v
-            else
-            {
-                for(int gsdfihjask=0;gsdfihjask<=1;gsdfihjask++)   
-                {
-                    //denna konstiga delay är för att testa så att man kan komma till huvudmenyn när vi sedan skapar den, den har 30 som temporärt värde av någon anledning
-                }
-                clearkulor(0);
-                lost=0;
-                initdetmesta();
-            }
         }
     }
 }
