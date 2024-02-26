@@ -286,7 +286,7 @@ void game_loop(void) {                                                          
                                                                                  //flyttar kula
                 }
             }
-            for(int i=0; i<=100;i++)
+            for(int i=0; i<100;i++)
             {
                 kulfard(i);
             }
@@ -323,7 +323,7 @@ void game_loop(void) {                                                          
             {
                 spawnafiender((score % 3)+1);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
             }
-            for(int f=0;f<=100;f++)
+            for(int f=0;f<100;f++)
             {
                 fiendemanovrering(0);
             }
