@@ -157,7 +157,7 @@ void render_bullets() {
   }
 }
 void render_fiende() {                                                                                              //bara för 1 fiende eftersom den är för ett test
-    for(int i=0;i<100;1++)
+    for(int i=0;i<100;i++)
     {
         if(fiendekoordinat[2][i]==1)
         {
@@ -320,7 +320,7 @@ void game_loop(void) {                                                          
                 spawnafiender(score++ % 3);               //antal fiender som spawnas med +1 då score börjar på 0 och %3 då det inte ska bli för svårt för snabbt
             }
             fiendemanovrering(0);
-            render_fiende()                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
+            render_fiende();                     //den här metoden ska ändras när vi har testat och vill ha fler än 1
             }
             //själva menyn |
             //             v

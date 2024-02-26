@@ -72,7 +72,7 @@ void spawnakula(void);
 void avfyrametod(int,int ,int);
 void kulfard(int);
 void fiendemanovrering(int);
-void skada(void);
+int skada(void);
 void clearkulor(int);      //kanske inte helt nödvändig men vi får se
 void spawnafiender(int);
 
@@ -152,3 +152,6 @@ extern int fiendekoordinat[3][100];
 extern int lost;
 extern int kula[3][100];
 extern int bullet_fire_delay;
+extern int score;
+void initdetmesta(void);
+extern int is_dead;
