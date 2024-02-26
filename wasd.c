@@ -230,6 +230,9 @@ void skada()                                        //ska se om spelare och fien
 
 
 
+//metod men för nu mest bara information som jag kanske kan ha nytta av, anta att score är en array med alla scores då denna kommer ge det till den
+
+
 int[] metodTillSparningAvScore()
 {
   int[1] tomInt;                                                                                    //temporär variabel för att förebygga errors innan metoden existerar
