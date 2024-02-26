@@ -1,7 +1,9 @@
-#include <stdint.h>   /* Declarations of uint_32 and the like */
+
+#include <stdint.h>   // Declarations of uint_32 and the like 
 #include <stdlib.h>
-#include <pic32mx.h>  /* Declarations of system-specific addresses etc */
-#include "functiondefinitions.h"  /* Declarations for functions */
+#include <pic32mx.h>  // Declarations of system-specific addresses etc 
+#include "functiondefinitions.h"  // Declarations for functions 
+
 
 
 int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 5=ned-höger, 6=ned-vänster, 7=upp-vänster
@@ -11,11 +13,6 @@ int lost=0;                  //0 betyder att man lever och 1 att spelet är för
 int score=0;                  //highscore som sedan ska sparas
 int variabelTillRandom=76;    //variabel som förändras och sedan blir till synes random då den beror på input
 
-// if is_dead == 1000, the enemy is dead
-// if below 1000, the enemy is alive
-int is_dead = 1000;
-
-
 // C har inte public
 
 void initdetmesta()
@@ -24,8 +21,8 @@ void initdetmesta()
   {
     for(int i=0;i<=99;i++)
     {
-      kula[i2][i]=is_dead;
-      fiendekoordinat[i2][i]=is_dead;
+      kula[i2][i]=1000;
+      fiendekoordinat[i2][i]=1000;
     }
   }
 }
@@ -132,25 +129,25 @@ void spawnakula()
     {
         //vänster-upp
         direction_gun=7;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     if(6==getsw())
     {
         //upphöger
         direction_gun=4;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     if(3==getsw())
     {
         //ned-höger
         direction_gun=5;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     if(9==getsw())
     {
         //ned-vänster
         direction_gun=6;
-        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter);
+        avfyrametod(direction_gun,x_mainCharacter,y_mainCharacter)
     }
     else
     {
@@ -162,7 +159,7 @@ int liteRandomVariabel=0;                                                       
 void avfyrametod(int riktning,int x,int y)                                        //metod för att skjuta, även den har inga problem men min kamrat vill inte använda den och skapar hellre egna metoder.       timer behövs för att betsämma hastighet av skott
 {
     int i=0;
-    while(kula[0][i]!=is_dead || i<=100)
+    while(kula[0][i]!=1000 || i<=100)
     {
       i++;
       //tar bara reda på hur mycket kulor som finns
@@ -172,25 +169,26 @@ void avfyrametod(int riktning,int x,int y)                                      
       i=0;
       if(liteRandomVariabel==0)
       {
-        for(int y=50;y<=100; y++)
+        for(int y=50;y<=100)
         {
-          kula[0][y]=is_dead;
-          kula[1][y]=is_dead;
-          kula[2][y]=is_dead;
+          kula[0][y]=1000;
+          kula[1][y]=1000;
+          kula[2][y]=1000;
           liteRandomVariabel=1;
         }
       }
       else
       {
-        for(int y=0;y<=50; y++)
+        for(int y=0;y<=50)
         {
-          kula[0][y]=is_dead;
-          kula[1][y]=is_dead;
-          kula[2][y]=is_dead;
+          kula[0][y]=1000;
+          kula[1][y]=1000;
+          kula[2][y]=1000;
           liteRandomVariabel=0;
         }
       }
     }
+    if(riktning<800)                //800 < 1000 därför ser den om kulan ej existerar
     kula[0][i]=x;                   //spawnar kulan i spelaren
     kula[1][i]=y;
     kula[2][i]=riktning;
@@ -254,7 +252,7 @@ int skada()                                        //ska se om spelare och fiend
   int dogDen=1;
   for(int gggg=0;gggg<100;gggg++)                   //spawnar en fiende om ingen finns
     {
-      if(fiendekoordinat[0][gggg]!=is_dead)
+      if(fiendekoordinat[0][gggg]!=1000;)
       {
         dogDen=0;
       }
@@ -265,13 +263,13 @@ int skada()                                        //ska se om spelare och fiend
       {
         lost=1;
       }
-      for(int i2=0;kula[0][i2]!=is_dead; i2++)
+      for(int i2=0;kula[0][i2]!=1000)
       {
       if(kula[0][i2]-fiendekoordinat[0][i]*kula[0][i2]-fiendekoordinat[0][i]<=9 && kula[1][i2]-fiendekoordinat[1][i]*kula[1][i2]-fiendekoordinat[1][i]<=9)
         {
-          fiendekoordinat[0][i]=is_dead;   //1000 är bara ett värde utanför skärmen då den här funktionen antar att det kan hanteras (det borde defenitivt hanteras annnars), om den kan ta sig från det till skärmen innan den ersätts bör den förtjäna att återupplivas
-          fiendekoordinat[1][i]=is_dead;
-          fiendekoordinat[2][i]=is_dead;     //visar att en ny fiende kan skapas här
+          fiendekoordinat[0][i]=1000;   //1000 är bara ett värde utanför skärmen då den här funktionen antar att det kan hanteras (det borde defenitivt hanteras annnars), om den kan ta sig från det till skärmen innan den ersätts bör den förtjäna att återupplivas
+          fiendekoordinat[1][i]=1000;
+          fiendekoordinat[2][i]=1000;     //visar att en ny fiende kan skapas här
           score++;                        //score går upp för varje dödad fiende
           dogDen=1;
         }
@@ -282,9 +280,9 @@ int skada()                                        //ska se om spelare och fiend
 
 void clearkulor(int o)        //tar bort alla kulor från och med o
 {
-  for(int i2=o;kula[0][i2]<=100; i2++)
+  for(int i2=o;kula[0][i2]<=100)
       {
-        kula[0][i2]=is_dead;
+        kula[0][i2]=1000;
       }
 }
 
@@ -294,7 +292,7 @@ void spawnafiender(int antal)       //while(kula[0][i]!=1000 || i<=100)
   while (i<=antal)
   {
     int b=0;
-    while(fiendekoordinat[2][b]!=is_dead || b==100)
+    while(fiendekoordinat[2][b]!=1000 || b==100)
     {
       //vill ta sig till en NULL, kan effektiviseras då jag gjorde den här sent på en lördagkväll
       b++;
@@ -302,16 +300,17 @@ void spawnafiender(int antal)       //while(kula[0][i]!=1000 || i<=100)
     if(b!=101)                    //spawnar ej nya om det på något vis finns 100
     {
     fiendekoordinat[2][b]=1;       //ska vara 1                         
-    fiendekoordinat[1][b]=3;                        //spawnar fiender random på botten
-    fiendekoordinat[0][b]=tillSynesrandom(128);
+    fiendekoordinat[1][b]=3;                        //spawnar fiender random till höger
+    fiendekoordinat[0][b]=tillSynesrandom(28)+100;
     variabelTillRandom+=10;
-    i++;
+    1++;
   }
   }
 }
 
 
 
+*/
 
 
 //det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();
