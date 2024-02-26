@@ -215,3 +215,33 @@ void skada()                                        //ska se om spelare och fien
 
 
 //det behövs nog även en timer för när olika metoder får anropas dvs timer innan den tittar om knappar tryckta med knapptryck(); men även kulfärd();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int[] metodTillSparningAvScore()
+{
+  int[1] tomInt;                                                                                    //temporär variabel för att förebygga errors innan metoden existerar
+  tomInt[0]=1;
+  //The 7-bit I2C device address for the EEPROM is ‘1010000’.
+
+  
+
+
+  //Digilent has a library for using the EEPROM. It is contained in document # DSD-0000311 (chipKIT IOShield
+  //Library.zip) which can be downloaded from the Basic I/O Shield product page at www.digilentinc.com. The
+  //EEPROM library is IOShieldEEPROM.
+  //https://digilent.com/reference/_media/chipkit_shield_basic_io_shield:chipkit_basic_io_shield_rm.pdf
+  return tomInt;
+}
