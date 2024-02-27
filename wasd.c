@@ -330,6 +330,8 @@ void starti2c()         //start
 int address(int lsb)         //1=>read, 0=>write          den här är överflödig men jag skapade den först
 {
   //1010000
+  SCL=0;
+  simpeldelayf();
   SDA=1;
   simpeldelayf();
   SCL=1;
@@ -367,23 +369,27 @@ int address(int lsb)         //1=>read, 0=>write          den här är överflö
   simpeldelayf();
   SCL=0;
   simpeldelayf();
-  //skickar lsb, dvs read eller write
+  //skickar lsb, dvs read eller writeSCL=1;
+  simpeldelayf();
   int b = SDAin;                                           //acknowlege
+  SCL=0;
+  simpeldelayf();
   return b;
 }
 
 void stopi2c()
 {
-  SDA = 0;             
+  SDA = 0;          
   simpeldelayf();
   SCL = 1;
-  simpeldelayf();
+  simpeldelayf();     //kanske borde vara som den var
   SDA = 1;
   simpeldelayf();
 }
 
 int skrivtilli2c(int tillbin)
 {
+  SCL=0;
   int bin[8];                                                 //det här hade kunnat göras med en loop men det är mer läsbart så här
   int bin[7] = (tillbin & (128))>>7;
   int bin[6] = (tillbin & (64))>>6;     
@@ -392,7 +398,7 @@ int skrivtilli2c(int tillbin)
   int bin[3] = (tillbin & (8))>>3;
   int bin[2] = (tillbin & (4))>>2;
   int bin[1] = (tillbin & (2))>>1;
-  int bin[0] = (tillbin & (1);
+  int bin[0] = tillbin & (1);
 
   for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
   {
@@ -404,6 +410,10 @@ int skrivtilli2c(int tillbin)
     simpeldelayf();
   }
   int b = SDAin;                                           //acknowlege
+  SCL=1;
+  simpeldelayf();
+  SCL=0;
+  simpeldelayf();
   return b;
 }
                                                             //   128,64,32,16,8,4,2,1
@@ -441,6 +451,8 @@ int readi2c(test)//test bör vara 0 men kanske 1 beroende på användning
   ;//nop
   return bit[0];
 }
+
+
 
 
 
