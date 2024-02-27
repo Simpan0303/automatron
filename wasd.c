@@ -254,7 +254,6 @@ int[] metodTillkollektionAvScore()//läser
   //data och clock till 1 båda in till 0
   starti2c();
   address(0);
-  skrivtilli2c(0);
   starti2c();
   address(1);
   tomInt[i]=readi2c(0);
