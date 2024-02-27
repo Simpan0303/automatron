@@ -61,6 +61,18 @@ extern const uint8_t filled_square[][5];
 extern const uint8_t bullet[][2];
 extern const uint8_t enemy[][3];
 
+// Numbers as 2D array images
+extern const uint8_t zero[][7];
+extern const uint8_t one[][7];
+extern const uint8_t two[][7];
+extern const uint8_t three[][7];
+extern const uint8_t four[][7];
+extern const uint8_t five[][7];
+extern const uint8_t six[][7];
+extern const uint8_t seven[][7];
+extern const uint8_t eight[][7];
+extern const uint8_t nine[][7];
+
 unsigned int getbtns(void);
 unsigned int getbtn1(void);
 int getsw(void);
@@ -143,7 +155,13 @@ typedef struct {
 
 void spawn_enemy(int x, int y);
 void update_enemy();
-int[] metodTillkollektionAvScore();
-void metodTillSparningAvScore(int[]);
+int damage_check();
 
+extern int game_state;
+extern int lives;
+
+/*
+int[] metodTillkollektionAvScore(); // void metodTillkollektionAvScore(int* scoreArray);
+void metodTillSparningAvScore(int[]);
+*/
 

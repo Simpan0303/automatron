@@ -8,11 +8,12 @@ int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 
 int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 int fiendekoordinat[2][1];    //fiendes koordinater
 
+/*
   #define SCL     TRISB4 // I2C clock 
   #define SDA     TRISB1 // I2C data
   #define SLCin     RB4  //clock in
   #define SDAin     RB1  //data in
-
+*/
 // C har inte public
 
 
@@ -238,7 +239,7 @@ void skada()                                        //ska se om spelare och fien
 //metod men för nu mest bara information som jag kanske kan ha nytta av, anta att score är en array med alla scores då denna kommer ge det till den
 
 
-
+/*
 
 int[] metodTillkollektionAvScore()//läser
 {
@@ -453,7 +454,7 @@ int readi2c(test)//test bör vara 0 men kanske 1 beroende på användning
 
 
 
-
+*/
 
 
 
