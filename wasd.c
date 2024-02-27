@@ -239,19 +239,29 @@ void skada()                                        //ska se om spelare och fien
 
 
 
-int[] metodTillSparningAvScore()
+
+int[] metodTillkollektionAvScore()
 {
   int[1] tomInt;                                                                                    //temporär variabel för att förebygga errors innan metoden existerar
   tomInt[0]=1;
 
-  //börja med i2c
-  SCL=1;
-  SDA=1;
-  SLCin=0;
-  SDAin=0;
+  for(int i=0;i<3;i++)
+  {
+    //börja med i2c
+    SCL=1;
+    SDA=1;
+    SLCin=0;
+    SDAin=0;
   //data och clock till 1 båda in till 0
-  
-
+  starti2c();
+  address(1);
+  skrivtilli2c(0);
+  skrivtilli2c(score[i]);
+  starti2c();
+  address(1);
+  tomInt[i]=readi2c(0);
+  stopi2c();
+  }
   //The 7-bit I2C device address for the EEPROM is ‘1010000’(+1 bit).   (+1 bit)={lsb=1 => read lsb=0 => write}
   //i2c clock pin = 19, JP8 on Uno32
   //i2c data pin = 18, JP6 on Uno32
@@ -262,18 +272,37 @@ int[] metodTillSparningAvScore()
   //18/A4 J7-09 27 TCK/PMA11/AN12/RB12 selected by JP6
   //19/A5 J7-11 29 PMALH/PMA1/U2RTS/AN14/RB14 selected by JP8
 
-  //Digilent has a library for using the EEPROM. It is contained in document # DSD-0000311 (chipKIT IOShield
-  //Library.zip) which can be downloaded from the Basic I/O Shield product page at www.digilentinc.com. The
-  //EEPROM library is IOShieldEEPROM.
-  //https://digilent.com/reference/_media/chipkit_shield_basic_io_shield:chipkit_basic_io_shield_rm.pdf
 
-  /*1. Send a start sequence
-2. Send the I2C address of the slave with the R/W bit low (even address)
-3. Send the internal register number you want to write to
-4. Send the data byte
-5. [Optionally, send any further data bytes]
-6. Send the stop sequence.*/
   return tomInt;
+}
+void metodTillSparningAvScore(int score[])
+{
+
+  for(int i=0;i<3;i++)
+  {
+    //börja med i2c
+    SCL=1;
+    SDA=1;
+    SLCin=0;
+    SDAin=0;
+  //data och clock till 1 båda in till 0
+  starti2c();
+  address(1);
+  skrivtilli2c(0);
+  skrivtilli2c(score[i]);
+  stopi2c();
+  }
+  //The 7-bit I2C device address for the EEPROM is ‘1010000’(+1 bit).   (+1 bit)={lsb=1 => read lsb=0 => write}
+  //i2c clock pin = 19, JP8 on Uno32
+  //i2c data pin = 18, JP6 on Uno32
+
+  // below 100KHz clock recomended
+  
+
+  //18/A4 J7-09 27 TCK/PMA11/AN12/RB12 selected by JP6
+  //19/A5 J7-11 29 PMALH/PMA1/U2RTS/AN14/RB14 selected by JP8
+
+
 }
 
 
@@ -345,7 +374,7 @@ int address(int lsb)         //1=>read, 0=>write          den här är överflö
   return b;
 }
 
-void stopi2c(void)
+void stopi2c()
 {
   SDA = 0;             
   simpeldelayf();
@@ -358,14 +387,14 @@ void stopi2c(void)
 int skrivtilli2c(int tillbin)
 {
   int bin[8];                                                 //det här hade kunnat göras med en loop men det är mer läsbart så här
-  int bin[7] = tillbin & (64+32+16+8+4+2+1);
-  int bin[6] = tillbin & (128+32+16+8+4+2+1);
-  int bin[5] = tillbin & (128+64+16+8+4+2+1);
-  int bin[4] = tillbin & (128+64+32+8+4+2+1);
-  int bin[3] = tillbin & (128+64+32+16+4+2+1);
-  int bin[2] = tillbin & (128+64+32+16+8+2+1);
-  int bin[1] = tillbin & (128+64+32+16+8+4+1);
-  int bin[0] = tillbin & (128+64+32+16+8+4+2);
+  int bin[7] = (tillbin & (128))>>7;
+  int bin[6] = (tillbin & (64))>>6;     
+  int bin[5] = (tillbin & (32))>>5;
+  int bin[4] = (tillbin & (16))>>4;
+  int bin[3] = (tillbin & (8))>>3;
+  int bin[2] = (tillbin & (4))>>2;
+  int bin[1] = (tillbin & (2))>>1;
+  int bin[0] = (tillbin & (1);
 
   for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
   {
@@ -380,5 +409,41 @@ int skrivtilli2c(int tillbin)
   return b;
 }
                                                             //   128,64,32,16,8,4,2,1
+
+int readi2c(test)//test bör vara 0 men kanske 1 beroende på användning
+{
+  int bit[8];
+  for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
+  {
+    simpeldelayf();
+    SCL=1;
+    while(SCLin==0)                                           //väntar på 1
+    {
+      simpeldelayf();
+      bit[c]=SDAin;
+    }
+    simpeldelayf();
+    SCL=0;
+    simpeldelayf();
+  }
+                                             //acknowlege
+  if(test==1)
+  {
+    SDA=0;
+  }
+  else
+  {
+    SDA=1;
+  }
+  SCL=1;
+  simpeldelayf();
+  SCL = 0;
+  SDA = 1;
+  bit[0]+=((bit[1]<<1)+(bit[2]<<2)+(bit[3]<<3)+(bit[4]<<4)+(bit[5]<<5)+(bit[6]<<6)+(bit[7]<<7))
+  ;//nop
+  return bit[0];
+}
+
+
 
 
