@@ -143,5 +143,7 @@ typedef struct {
 
 void spawn_enemy(int x, int y);
 void update_enemy();
+int[] metodTillkollektionAvScore();
+void metodTillSparningAvScore(int[]);
 
 
