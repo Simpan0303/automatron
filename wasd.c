@@ -240,10 +240,9 @@ void skada()                                        //ska se om spelare och fien
 
 
 
-int[] metodTillkollektionAvScore()
+int[] metodTillkollektionAvScore()//läser
 {
-  int[1] tomInt;                                                                                    //temporär variabel för att förebygga errors innan metoden existerar
-  tomInt[0]=1;
+  int[3] tomInt;
 
   for(int i=0;i<3;i++)
   {
@@ -254,9 +253,8 @@ int[] metodTillkollektionAvScore()
     SDAin=0;
   //data och clock till 1 båda in till 0
   starti2c();
-  address(1);
+  address(0);
   skrivtilli2c(0);
-  skrivtilli2c(score[i]);
   starti2c();
   address(1);
   tomInt[i]=readi2c(0);
@@ -275,7 +273,7 @@ int[] metodTillkollektionAvScore()
 
   return tomInt;
 }
-void metodTillSparningAvScore(int score[])
+void metodTillSparningAvScore(int score[])//skriver
 {
 
   for(int i=0;i<3;i++)
@@ -287,7 +285,7 @@ void metodTillSparningAvScore(int score[])
     SDAin=0;
   //data och clock till 1 båda in till 0
   starti2c();
-  address(1);
+  address(0);
   skrivtilli2c(0);
   skrivtilli2c(score[i]);
   stopi2c();
@@ -443,6 +441,9 @@ int readi2c(test)//test bör vara 0 men kanske 1 beroende på användning
   ;//nop
   return bit[0];
 }
+
+
+
 
 
 
