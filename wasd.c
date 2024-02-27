@@ -10,8 +10,8 @@ int fiendekoordinat[2][1];    //fiendes koordinater
 
   #define SCL     TRISB4 // I2C clock 
   #define SDA     TRISB1 // I2C data
-  #define SLCin     RB14  //clock in
-  #define SDAin     RB12  //data in
+  #define SLCin     RB4  //clock in
+  #define SDAin     RB1  //data in
 
 // C har inte public
 
