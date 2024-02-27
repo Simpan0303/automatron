@@ -8,6 +8,11 @@ int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 
 int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 int fiendekoordinat[2][1];    //fiendes koordinater
 
+  #define SCL     TRISB4 // I2C clock 
+  #define SDA     TRISB1 // I2C data
+  #define SLCin     RB14  //clock in
+  #define SDAin     RB12  //data in
+
 // C har inte public
 
 
@@ -233,18 +238,147 @@ void skada()                                        //ska se om spelare och fien
 //metod men för nu mest bara information som jag kanske kan ha nytta av, anta att score är en array med alla scores då denna kommer ge det till den
 
 
+
 int[] metodTillSparningAvScore()
 {
   int[1] tomInt;                                                                                    //temporär variabel för att förebygga errors innan metoden existerar
   tomInt[0]=1;
-  //The 7-bit I2C device address for the EEPROM is ‘1010000’.
 
+  //börja med i2c
+  SCL=1;
+  SDA=1;
+  SLCin=0;
+  SDAin=0;
+  //data och clock till 1 båda in till 0
   
 
+  //The 7-bit I2C device address for the EEPROM is ‘1010000’(+1 bit).   (+1 bit)={lsb=1 => read lsb=0 => write}
+  //i2c clock pin = 19, JP8 on Uno32
+  //i2c data pin = 18, JP6 on Uno32
+
+  // below 100KHz clock recomended
+  
+
+  //18/A4 J7-09 27 TCK/PMA11/AN12/RB12 selected by JP6
+  //19/A5 J7-11 29 PMALH/PMA1/U2RTS/AN14/RB14 selected by JP8
 
   //Digilent has a library for using the EEPROM. It is contained in document # DSD-0000311 (chipKIT IOShield
   //Library.zip) which can be downloaded from the Basic I/O Shield product page at www.digilentinc.com. The
   //EEPROM library is IOShieldEEPROM.
   //https://digilent.com/reference/_media/chipkit_shield_basic_io_shield:chipkit_basic_io_shield_rm.pdf
+
+  /*1. Send a start sequence
+2. Send the I2C address of the slave with the R/W bit low (even address)
+3. Send the internal register number you want to write to
+4. Send the data byte
+5. [Optionally, send any further data bytes]
+6. Send the stop sequence.*/
   return tomInt;
 }
+
+
+
+
+//metoder för i2c
+void simpeldelayf()     //jag har inte riktigt bråttom när jag använder i2c i det här programmet (vi funderade till och med på en artificiell loading screen där i2c används)
+{
+  for(int simpeldelay=0;simpeldelay<=105;simpeldelay++)
+  {
+    volatile int i=0;     //bara för något delay
+  }
+}
+
+void starti2c()         //start
+{
+  //1010000
+  SDA=1;
+  simpeldelayf();
+  SCL=1;
+  simpeldelayf();
+  SDA=0;
+  simpeldelayf();
+  SCL=0;
+}
+
+int address(int lsb)         //1=>read, 0=>write          den här är överflödig men jag skapade den först
+{
+  //1010000
+  SDA=1;
+  simpeldelayf();
+  SCL=1;
+  simpeldelayf();
+  SCL=0;
+  simpeldelayf();
+  //skickar 1
+  SDA=0;
+  simpeldelayf();
+  SCL=1;
+  simpeldelayf();
+  SCL=0;
+  simpeldelayf();
+  //skickar 0
+  SDA=1;
+  simpeldelayf();
+  SCL=1;
+  simpeldelayf();
+  SCL=0;
+  simpeldelayf();
+  //skickar 1
+  for(int o=0;o<4;o++)
+  {
+    SDA=0;
+    simpeldelayf();
+    SCL=1;
+    simpeldelayf();
+    SCL=0;
+    simpeldelayf();
+  //skickar 0000
+  }
+  SDA=lsb;
+  simpeldelayf();
+  SCL=1;
+  simpeldelayf();
+  SCL=0;
+  simpeldelayf();
+  //skickar lsb, dvs read eller write
+  int b = SDAin;                                           //acknowlege
+  return b;
+}
+
+void stopi2c(void)
+{
+  SDA = 0;             
+  simpeldelayf();
+  SCL = 1;
+  simpeldelayf();
+  SDA = 1;
+  simpeldelayf();
+}
+
+int skrivtilli2c(int tillbin)
+{
+  int bin[8];                                                 //det här hade kunnat göras med en loop men det är mer läsbart så här
+  int bin[7] = tillbin & (64+32+16+8+4+2+1);
+  int bin[6] = tillbin & (128+32+16+8+4+2+1);
+  int bin[5] = tillbin & (128+64+16+8+4+2+1);
+  int bin[4] = tillbin & (128+64+32+8+4+2+1);
+  int bin[3] = tillbin & (128+64+32+16+4+2+1);
+  int bin[2] = tillbin & (128+64+32+16+8+2+1);
+  int bin[1] = tillbin & (128+64+32+16+8+4+1);
+  int bin[0] = tillbin & (128+64+32+16+8+4+2);
+
+  for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
+  {
+    SDA=bin[c];
+    simpeldelayf();
+    SCL=1;
+    simpeldelayf();
+    SCL=0;
+    simpeldelayf();
+  }
+  int b = SDAin;                                           //acknowlege
+  return b;
+}
+                                                            //   128,64,32,16,8,4,2,1
+
+
