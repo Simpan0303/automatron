@@ -61,6 +61,7 @@ extern const uint8_t filled_square[][5];
 extern const uint8_t bullet[][2];
 extern const uint8_t enemy[][3];
 
+
 // Numbers as 2D array images
 extern const uint8_t zero[][7];
 extern const uint8_t one[][7];
@@ -72,6 +73,9 @@ extern const uint8_t six[][7];
 extern const uint8_t seven[][7];
 extern const uint8_t eight[][7];
 extern const uint8_t nine[][7];
+
+extern const uint8_t heart[][7];
+
 
 unsigned int getbtns(void);
 unsigned int getbtn1(void);
@@ -129,7 +133,7 @@ void update_bullets(Bullet* bullet);
 
 
 
-#define BULLET_SPEED 2
+#define BULLET_SPEED 1
 #define BULLET_WIDTH 2
 #define MAX_BULLETS 100 // arbitrary large number
 #define BULLET_FIRE_DELAY_MAX 5
@@ -141,7 +145,8 @@ extern int bullet_direction;
 
 
 // Enemy logic
-#define MAX_ENEMIES 1
+extern int enemies_amount;
+#define MAX_ENEMIES 100
 typedef struct {
    int x;
    int y;
@@ -157,11 +162,26 @@ void spawn_enemy(int x, int y);
 void update_enemy();
 int damage_check();
 
+
+
 extern int game_state;
 extern int lives;
 
-/*
-int[] metodTillkollektionAvScore(); // void metodTillkollektionAvScore(int* scoreArray);
+int* metodTillkollektionAvScore();
 void metodTillSparningAvScore(int[]);
-*/
+
+int SLCin(void);   
+int SDAin(void);
+
+void SLC(int i);
+void SDA(int i);
+void SLCut(int i);
+void SDAut(int i);
+
+void startI2C(void);
+void simpledelayf(void);
+int address(int lsb);
+
+
+
 

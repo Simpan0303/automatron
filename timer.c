@@ -491,6 +491,7 @@ void display_life_amount() {
     // Display amount of lifes on the 7-segment display
     // Display in top right corner of the screen
     // Only one digit
+    display_image(113, 0, 7, heart); // Display heart symbol
     if (lives < 10) {
         display_image(120, 0, 7, *digit_images[lives]); // Display the first digit
     }
@@ -539,10 +540,89 @@ int spawn_rate_timeout = 0;
 int game_state = 0; // 0 = game running, 1 = game over, 2 = score screen
 
 // arr of size 3
-int highscores[3] = {0, 0, 0};
+
+
+// higscores holds the top 3 highscores
+// temp_score is the current score
+// temp_highscores is a copy of highscores
+int highscores[3];
+
+// zero out highscores
+int zero_highscores[3] = {0, 0, 0};
+
+// write zero_highscores to eeprom
+// write function = metodTillSparningAvScore
+// read function = metodTillkollektionAvScore
+// Declare display_highscore before calling it
+
+
+
+
 
 // init eeprom 
 
+
+// display_highscore takes the highscore array and displays it on the screen
+
+void display_highscore(int score) {
+    // Check if the score is negative
+    // display 0 if score is negative
+    if (score < 0) {
+        // display
+    }
+    // Display the score on the 7-segment display
+    if (score < 10) {
+        display_image(1, 0, 7, *digit_images[0]); // Display the first digit
+        display_image(9, 0, 7, *digit_images[0]); // Display the second digit
+        display_image(17, 0, 7, *digit_images[score]); // Display the third digit
+    } else if (score < 100) {
+        display_image(1, 0, 7, *digit_images[0]); // Display the first digit
+        display_image(9, 0, 7, *digit_images[score / 10]); // Display the second digit
+        display_image(17, 0, 7, *digit_images[score % 10]); // Display the third digit
+    } else if (score < 1000){
+        display_image(1, 0, 7, *digit_images[score / 100]); // Display the first digit
+        display_image(9, 0, 7, *digit_images[(score / 10) % 10]); // Display the second digit
+        display_image(17, 0, 7, *digit_images[score % 10]); // Display the third digit
+    }
+}
+
+// convert temp_score to highscores array
+// do not use metodTillSparningAvScore if you want to keep the highscores array
+// function name = save_temp_score
+void save_temp_score(int score) {
+    // Read the high scores from EEPROM
+    int* highscores = metodTillkollektionAvScore();
+
+    // Find the maximum high score
+    int max_highscore = highscores[0];
+    for (int i = 1; i < 3; i++) {
+        if (highscores[i] > max_highscore) {
+            max_highscore = highscores[i];
+        }
+    }
+
+    // Only update the high scores if the current score is higher than the maximum high score
+    if (score > max_highscore) {
+        // Write the new high score to the EEPROM
+        int new_highscores[3] = {score, max_highscore, highscores[1] != max_highscore ? highscores[1] : highscores[2]};
+        metodTillSparningAvScore(new_highscores);
+
+        // Read the updated high scores from the EEPROM
+        highscores = metodTillkollektionAvScore();
+
+        // Display the updated high scores
+        display_highscore(highscores[0]);
+    }
+}
+
+
+
+// clear eeprom scores (higscores arr of size 3)
+void clear_eeprom_scores() {
+    // Clear the high scores in the EEPROM
+    int new_highscores[3] = {0, 0, 0};
+    metodTillSparningAvScore(new_highscores);
+}
 
 
 void game_loop(void) {
@@ -565,22 +645,24 @@ void game_loop(void) {
 
             delay(10000);
             quicksleep(1000000);
+            clear_display();
 
             // wait 10 seconds
             game_state = 2;
 
-            // write to eeprom
-            // metodTillSparningAvScore(highscores);
+            // clear_eeprom_scores();
 
-            display_string(0, "HIGHSCORES");
-            // display highscores
-            /*
-            char scoreStr[12]; // Buffer to hold the string representation of the score
-            printf(scoreStr, "%d", highscores[0]); // Convert the score to a string
-            display_string(1, scoreStr); // Display the string
-            */
+            
+            save_temp_score(temp_score);
+            // clear eeprom scores
 
-            display_update();
+
+
+            // max 3 highscores, with max value of 999
+            //for (int i = 0; i < 3; i++) {
+            //    display_highscore(highscores[i]);
+            //}
+            
 
             delay(10000);
             quicksleep(1000000);
@@ -588,6 +670,18 @@ void game_loop(void) {
 
             lives = 3;
             enemies_amount = 1;
+            // set all enemies to inactive
+            for (int i = 0; i < MAX_ENEMIES; i++) {
+                enemies[i].active = 0;
+            }
+            // set all bullets to inactive
+            for (int i = 0; i < MAX_BULLETS; i++) {
+                bullets[i].active = 0;
+            }
+            x_mainCharacter = 64;
+            y_mainCharacter = 14;
+
+
             temp_score = 0;
         }
 
@@ -675,3 +769,8 @@ void game_loop(void) {
     }
 
 }
+
+
+
+
+

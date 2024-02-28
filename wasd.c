@@ -8,14 +8,72 @@ int direction_gun=0;        //0=upp, 1=höger, 2=ned, 3=vänster, 4=upp-höger, 
 int kula[3][1];   //kula[0]==x, kula[1]==y, kula[2]==riktning
 int fiendekoordinat[2][1];    //fiendes koordinater
 
-/*
-  #define SCL     TRISB4 // I2C clock 
-  #define SDA     TRISB1 // I2C data
-  #define SLCin     RB4  //clock in
-  #define SDAin     RB1  //data in
-*/
-// C har inte public
+//clock => 14 data=> 12
+  void SLC(int i)
+  {
+	  if((TRISB>>14)%2==0)//om 0, 1 ställ beroende på i
+	  {
+		TRISB+=(0x4000*i);
+	  }
+	  else//om 1, 0 ställ beroende på i
+	  {
+		  i=(i-1)*(i-1);//(i-1)^2 = antingen 0^2 eller 1
+		  TRISB-=(0x4000*i);//14=>0x4000	
+	  }
+  } // I2C clock 
+  //19=>14 bit index
+  void SDA(int i)
+  {
+	  if((TRISB>>12)%2==0)//om 0, 1 ställ beroende på i
+	  {
+		TRISB+=(0x1000*i);
+	  }
+	  else//om 1, 0 ställ beroende på i
+	  {
+		  i=(i-1)*(i-1);//(i-1)^2 = antingen 0^2 eller 1
+		  TRISB-=(0x1000*i);//12=>0x1000	
+	  }
+  }
 
+  //18=>12 bit index
+  int SLCin()
+  {
+	  return ((PORTB>>14)%2);  //clock in
+  }
+  int SDAin()
+  {
+	  return ((PORTB>>12)%2);  //data in
+  }
+
+  void SLCut(int i)
+  {
+	  if(SLCin()==0)//om 0, 1 ställ beroende på i
+	  {
+		PORTB+=(0x4000*i);
+	  }
+	  else//om 1, 0 ställ beroende på i
+	  {
+		  i=(i-1)*(i-1);//(i-1)^2 = antingen 0^2 eller 1
+		  PORTB-=(0x4000*i);//14=>0x4000	
+	  }
+  } // I2C clock 
+  //19=>14 bit index
+  void SDAut(int i)
+  {
+	  if(SDAin()==0)//om 0, 1 ställ beroende på i
+	  {
+		PORTB+=(0x1000*i);
+	  }
+	  else//om 1, 0 ställ beroende på i
+	  {
+		  i=(i-1)*(i-1);//(i-1)^2 = antingen 0^2 eller 1
+		  PORTB-=(0x1000*i);//12=>0x1000	
+	  }
+  }
+  
+
+// C har inte public
+//8,4,2,1
 
 /*
 --display--
@@ -238,20 +296,168 @@ void skada()                                        //ska se om spelare och fien
 
 //metod men för nu mest bara information som jag kanske kan ha nytta av, anta att score är en array med alla scores då denna kommer ge det till den
 
-
-/*
-
-int[] metodTillkollektionAvScore()//läser
+//metoder för i2c
+void simpeldelayf()     //jag har inte riktigt bråttom när jag använder i2c i det här programmet (vi funderade till och med på en artificiell loading screen där i2c används)
 {
-  int[3] tomInt;
+  for(int simpeldelay=0;simpeldelay<=105;simpeldelay++)
+  {
+    volatile int i=0;     //bara för något delay
+  }
+}
+
+void starti2c()         //start
+{
+  //1010000
+  SDA(1);
+  simpeldelayf();
+  SLC(1);
+  simpeldelayf();
+  SDA(0);
+  simpeldelayf();
+  SLC(0);
+}
+
+int address(int lsb)         //1=>read, 0=>write          den här är överflödig men jag skapade den först
+{
+  //1010000
+  SLC(0);
+  simpeldelayf();
+  SDA(1);
+  simpeldelayf();
+  SLC(1);
+  simpeldelayf();
+  SLC(0);
+  simpeldelayf();
+  //skickar 1
+  SDA(0);
+  simpeldelayf();
+  SLC(1);
+  simpeldelayf();
+  SLC(0);
+  simpeldelayf();
+  //skickar 0
+  SDA(1);
+  simpeldelayf();
+  SLC(1);
+  simpeldelayf();
+  SLC(0);
+  simpeldelayf();
+  //skickar 1
+  for(int o=0;o<4;o++)
+  {
+    SDA(0);
+    simpeldelayf();
+    SLC(1);
+    simpeldelayf();
+    SLC(0);
+    simpeldelayf();
+  //skickar 0000
+  }
+  SDA(lsb);
+  simpeldelayf();
+  SLC(1);
+  simpeldelayf();
+  SLC(0);
+  simpeldelayf();
+  //skickar lsb, dvs read eller writeSCL=1;
+  simpeldelayf();
+  int b = SDAin();                                           //acknowlege
+  SLC(0);
+  simpeldelayf();
+  return b;
+}
+
+void stopi2c()
+{
+  SDA(0);          
+  simpeldelayf();
+  SLC(1);
+  simpeldelayf();     //kanske borde vara som den var
+  SDA(1);
+  simpeldelayf();
+}
+
+int skrivtilli2c(int tillbin)
+{
+  SLC(0);
+  int bin[8];                                                 //det här hade kunnat göras med en loop men det är mer läsbart så här
+  bin[7] = (tillbin & (128))>>7;
+  bin[6] = (tillbin & (64))>>6;
+  bin[5] = (tillbin & (32))>>5;
+  bin[4] = (tillbin & (16))>>4;
+  bin[3] = (tillbin & (8))>>3;
+  bin[2] = (tillbin & (4))>>2;
+  bin[1] = (tillbin & (2))>>1;
+  bin[0] = tillbin & (1);
+
+  for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
+  {
+    SDA(bin[c]);
+    simpeldelayf();
+    SLC(1);
+    simpeldelayf();
+    SLC(0);
+    simpeldelayf();
+  }
+  int b = SDAin();                                           //acknowlege
+  SLC(1);
+  simpeldelayf();
+  SLC(0);
+  simpeldelayf();
+  return b;
+}
+                                                            //   128,64,32,16,8,4,2,1
+
+int readi2c(int test)//test bör vara 0 men kanske 1 beroende på användning
+{
+  int bit[8];
+  for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
+  {
+    simpeldelayf();
+    SLC(1);
+    while(SLCin()==0)                                           //väntar på 1
+    {
+      simpeldelayf();
+      bit[c]=SDAin();
+    }
+    simpeldelayf();
+    SLC(0);
+    simpeldelayf();
+  }
+                                             //acknowlege
+  if(test==1)
+  {
+    SDA(0);
+  }
+  else
+  {
+    SDA(1);
+  }
+  SLC(1);
+  simpeldelayf();
+  SLC(0);
+  SDA(1);
+  bit[0]+=((bit[1]<<1)+(bit[2]<<2)+(bit[3]<<3)+(bit[4]<<4)+(bit[5]<<5)+(bit[6]<<6)+(bit[7]<<7))
+  ;//nop
+  return bit[0];
+}
+
+
+
+
+
+int tomInt[3];
+
+int* metodTillkollektionAvScore()//läser // Reads
+{
 
   for(int i=0;i<3;i++)
   {
     //börja med i2c
-    SCL=1;
-    SDA=1;
-    SLCin=0;
-    SDAin=0;
+    SLC(1);
+    SDA(1);
+    SLCut(0);
+    SDAut(0);
   //data och clock till 1 båda in till 0
   starti2c();
   address(0);
@@ -273,16 +479,16 @@ int[] metodTillkollektionAvScore()//läser
 
   return tomInt;
 }
-void metodTillSparningAvScore(int score[])//skriver
+void metodTillSparningAvScore(int score[])//skriver // Writes
 {
 
   for(int i=0;i<3;i++)
   {
     //börja med i2c
-    SCL=1;
-    SDA=1;
-    SLCin=0;
-    SDAin=0;
+    SLC(1);
+    SDA(1);
+    SLCut(0);
+    SDAut(0);
   //data och clock till 1 båda in till 0
   starti2c();
   address(0);
@@ -306,155 +512,6 @@ void metodTillSparningAvScore(int score[])//skriver
 
 
 
-//metoder för i2c
-void simpeldelayf()     //jag har inte riktigt bråttom när jag använder i2c i det här programmet (vi funderade till och med på en artificiell loading screen där i2c används)
-{
-  for(int simpeldelay=0;simpeldelay<=105;simpeldelay++)
-  {
-    volatile int i=0;     //bara för något delay
-  }
-}
-
-void starti2c()         //start
-{
-  //1010000
-  SDA=1;
-  simpeldelayf();
-  SCL=1;
-  simpeldelayf();
-  SDA=0;
-  simpeldelayf();
-  SCL=0;
-}
-
-int address(int lsb)         //1=>read, 0=>write          den här är överflödig men jag skapade den först
-{
-  //1010000
-  SCL=0;
-  simpeldelayf();
-  SDA=1;
-  simpeldelayf();
-  SCL=1;
-  simpeldelayf();
-  SCL=0;
-  simpeldelayf();
-  //skickar 1
-  SDA=0;
-  simpeldelayf();
-  SCL=1;
-  simpeldelayf();
-  SCL=0;
-  simpeldelayf();
-  //skickar 0
-  SDA=1;
-  simpeldelayf();
-  SCL=1;
-  simpeldelayf();
-  SCL=0;
-  simpeldelayf();
-  //skickar 1
-  for(int o=0;o<4;o++)
-  {
-    SDA=0;
-    simpeldelayf();
-    SCL=1;
-    simpeldelayf();
-    SCL=0;
-    simpeldelayf();
-  //skickar 0000
-  }
-  SDA=lsb;
-  simpeldelayf();
-  SCL=1;
-  simpeldelayf();
-  SCL=0;
-  simpeldelayf();
-  //skickar lsb, dvs read eller writeSCL=1;
-  simpeldelayf();
-  int b = SDAin;                                           //acknowlege
-  SCL=0;
-  simpeldelayf();
-  return b;
-}
-
-void stopi2c()
-{
-  SDA = 0;          
-  simpeldelayf();
-  SCL = 1;
-  simpeldelayf();     //kanske borde vara som den var
-  SDA = 1;
-  simpeldelayf();
-}
-
-int skrivtilli2c(int tillbin)
-{
-  SCL=0;
-  int bin[8];                                                 //det här hade kunnat göras med en loop men det är mer läsbart så här
-  int bin[7] = (tillbin & (128))>>7;
-  int bin[6] = (tillbin & (64))>>6;     
-  int bin[5] = (tillbin & (32))>>5;
-  int bin[4] = (tillbin & (16))>>4;
-  int bin[3] = (tillbin & (8))>>3;
-  int bin[2] = (tillbin & (4))>>2;
-  int bin[1] = (tillbin & (2))>>1;
-  int bin[0] = tillbin & (1);
-
-  for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
-  {
-    SDA=bin[c];
-    simpeldelayf();
-    SCL=1;
-    simpeldelayf();
-    SCL=0;
-    simpeldelayf();
-  }
-  int b = SDAin;                                           //acknowlege
-  SCL=1;
-  simpeldelayf();
-  SCL=0;
-  simpeldelayf();
-  return b;
-}
-                                                            //   128,64,32,16,8,4,2,1
-
-int readi2c(test)//test bör vara 0 men kanske 1 beroende på användning
-{
-  int bit[8];
-  for(int c=7;c>=0;c--)                                       //skriver de värden som jag tagit ut ovan
-  {
-    simpeldelayf();
-    SCL=1;
-    while(SCLin==0)                                           //väntar på 1
-    {
-      simpeldelayf();
-      bit[c]=SDAin;
-    }
-    simpeldelayf();
-    SCL=0;
-    simpeldelayf();
-  }
-                                             //acknowlege
-  if(test==1)
-  {
-    SDA=0;
-  }
-  else
-  {
-    SDA=1;
-  }
-  SCL=1;
-  simpeldelayf();
-  SCL = 0;
-  SDA = 1;
-  bit[0]+=((bit[1]<<1)+(bit[2]<<2)+(bit[3]<<3)+(bit[4]<<4)+(bit[5]<<5)+(bit[6]<<6)+(bit[7]<<7))
-  ;//nop
-  return bit[0];
-}
-
-
-
-*/
 
 
 

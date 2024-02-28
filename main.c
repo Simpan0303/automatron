@@ -70,17 +70,10 @@ int main(void) {
 	
 	labinit(); /* Do any lab-specific initialization */
 	// knapptryck();
+	
 	while( 1 )
 	{
-		game_loop(); /* Do lab-specific things again and again */
-
-
-		// on button press, move main character right on x axis
-		// use knapptryck() from wasd.c
-
-		
-		
-		// display_image(64, 32, 5, filled_square);
+		game_loop();
 
 
 	}
