@@ -461,6 +461,7 @@ int* metodTillkollektionAvScore()//läser // Reads
   //data och clock till 1 båda in till 0
   starti2c();
   address(0);
+  skrivtilli2c(i);
   starti2c();
   address(1);
   tomInt[i]=readi2c(0);
@@ -492,7 +493,7 @@ void metodTillSparningAvScore(int score[])//skriver // Writes
   //data och clock till 1 båda in till 0
   starti2c();
   address(0);
-  skrivtilli2c(0);
+  skrivtilli2c(i);
   skrivtilli2c(score[i]);
   stopi2c();
   }
