@@ -557,7 +557,93 @@ int zero_highscores[3] = {0, 0, 0};
 
 
 
+// higscores holds the top 3 highscores
+// temp_score is the current score
+// temp_highscores is a copy of highscores
+int highscores[3];
 
+// zero out highscores
+int new_highscores[3] = {1, 5, 8};
+
+// write zero_highscores to eeprom
+// write function = metodTillSparningAvScore
+// read function = metodTillkollektionAvScore
+// Declare display_highscore before calling it
+
+
+// convert highscores[0] to string
+
+
+
+// From stackoverflow - not mine
+void IntegertoString(char * string, int number) {
+
+   if(number == 0) { string[0] = '0'; return; };
+   int divide = 0;
+   int modResult;
+   int  length = 0;
+   int isNegative = 0;
+   int  copyOfNumber;
+   int offset = 0;
+   copyOfNumber = number;
+   if( number < 0 ) {
+     isNegative = 1;
+     number = 0 - number;
+     length++;
+   }
+   while(copyOfNumber != 0) 
+   { 
+     length++;
+     copyOfNumber /= 10;
+   }
+
+   for(divide = 0; divide < length; divide++) {
+     modResult = number % 10;
+     number    = number / 10;
+     string[length - (divide + 1)] = modResult + '0';
+   }
+   if(isNegative) { 
+   string[0] = '-';
+   }
+   string[length] = '\0';
+}
+
+// update eeprom with values
+// returns updated values as int array - format {n, n, n}
+int* update_eeprom(int* values) {
+    // Write values to the EEPROM
+    metodTillSparningAvScore(values);
+    // read values from eeprom
+    int* fixed_score = metodTillkollektionAvScore();
+    // return read values
+    return fixed_score;
+
+}
+
+void display_highscores_string(int* highscores) {
+    // Update highscores and get the updated values
+    int* updated_highscores = update_eeprom(highscores);
+    // Now use updated_highscores for displaying highscores
+
+    char string[16];
+    int number = updated_highscores[0];       //1307152
+    IntegertoString(string, number);
+
+    // highscores[1] convert
+    char string2[16];
+    number = updated_highscores[1];       //1307152
+    IntegertoString(string2, number);
+
+    // highscores[2] convert
+    char string3[16];
+    number = updated_highscores[2];       //1307152
+    IntegertoString(string3, number);
+
+    display_string(0, string);
+    display_string(1, string2);
+    display_string(2, string3);
+    display_update();
+}
 
 // init eeprom 
 
@@ -653,8 +739,12 @@ void game_loop(void) {
             // clear_eeprom_scores();
 
             
-            save_temp_score(temp_score);
+            //save_temp_score(temp_score);
             // clear eeprom scores
+
+            //display_highscores(highscores);
+
+            display_highscores_string(highscores);
 
 
 
