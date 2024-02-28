@@ -361,6 +361,8 @@ int address(int lsb)         //1=>read, 0=>write          den här är överflö
   simpeldelayf();
   //skickar lsb, dvs read eller writeSCL=1;
   simpeldelayf();
+  SLC(1);//clock upp för ack
+  simpeldelayf();
   int b = SDAin();                                           //acknowlege
   SLC(0);
   simpeldelayf();
@@ -399,8 +401,10 @@ int skrivtilli2c(int tillbin)
     SLC(0);
     simpeldelayf();
   }
-  int b = SDAin();                                           //acknowlege
+                                            //acknowlege
   SLC(1);
+  simpeldelayf();
+  int b = SDAin(); 
   simpeldelayf();
   SLC(0);
   simpeldelayf();
@@ -436,7 +440,6 @@ int readi2c(int test)//test bör vara 0 men kanske 1 beroende på användning
   SLC(1);
   simpeldelayf();
   SLC(0);
-  SDA(1);
   bit[0]+=((bit[1]<<1)+(bit[2]<<2)+(bit[3]<<3)+(bit[4]<<4)+(bit[5]<<5)+(bit[6]<<6)+(bit[7]<<7))
   ;//nop
   return bit[0];
@@ -464,7 +467,7 @@ int* metodTillkollektionAvScore()//läser // Reads
   skrivtilli2c(i);
   starti2c();
   address(1);
-  tomInt[i]=readi2c(0);
+  tomInt[i]=readi2c(1);
   stopi2c();
   }
   //The 7-bit I2C device address for the EEPROM is ‘1010000’(+1 bit).   (+1 bit)={lsb=1 => read lsb=0 => write}
