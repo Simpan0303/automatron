@@ -147,7 +147,7 @@ void display_string(int line, char *s) {
 
 /*
 -------------------
-Display image (2D array)
+Display image (2D array) - square
 By: Simon Svanberg
 */
 
@@ -215,7 +215,8 @@ void clear_display() {
 
 
 /*
-Clear Image (2D array)
+-------------------
+Clear Image (2D array) - square
 By: Simon Svanberg
 */
 
@@ -259,34 +260,24 @@ void clear_image(int x, int y, int size, const uint8_t data[][size]) {
 
 /*
 -------------------
-Border Collision (128x32)
+Border Collision (128x32) - for the main character
 By: Simon Svanberg
 */
 void border_collision(void) {
-    if (x_mainCharacter < 0) {
-        x_mainCharacter = 0;
+    if (x_mainCharacter < 1) {
+        x_mainCharacter = 1;
     }
-    if (x_mainCharacter > 123) {
-        x_mainCharacter = 123;
+    if (x_mainCharacter > 122) {
+        x_mainCharacter = 122;
     }
-    if (y_mainCharacter < 0) {
-        y_mainCharacter = 0;
+    if (y_mainCharacter < 1) {
+        y_mainCharacter = 1;
     }
     if (y_mainCharacter > 24) {
         y_mainCharacter = 24;
     }
 
 }
-
-
-
-/*
--------------------
-Bullet/Hit Collision Detection
-By: Simon Svanberg
-*/
-
-
 
 
 void display_update(void) {

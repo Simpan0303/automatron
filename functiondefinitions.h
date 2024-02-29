@@ -75,6 +75,8 @@ extern const uint8_t eight[][7];
 extern const uint8_t nine[][7];
 
 extern const uint8_t heart[][7];
+extern const uint8_t right_arrow[][7];
+extern const uint8_t circled_1[][9];
 
 
 unsigned int getbtns(void);
@@ -83,6 +85,7 @@ int getsw(void);
 void enable_interrupt(void);
 
 void knapptryck(void);
+int switchinput(void);
 
 #define STATE_DRAW 0
 #define STATE_CLEAR 1

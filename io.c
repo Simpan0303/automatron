@@ -5,6 +5,14 @@
 volatile uint32_t *portDAddress = (volatile uint32_t *) &PORTD;
 
 
+/*
+-------------------------------------
+GET BUTTONS AND SWITCHES FROM IO PORTS
+By: Isak Erikson Winbäck
+Modified by: Simon Svanberg
+-------------------------------------
+*/
+
 
 
 // Function to get the status of the switches

@@ -74,8 +74,6 @@ int main(void) {
 	while( 1 )
 	{
 		game_loop();
-
-
 	}
 	return 0;
 }
