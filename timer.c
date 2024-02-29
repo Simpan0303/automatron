@@ -616,7 +616,7 @@ int damage_check() {
             }
         }
         if (collisionDetected) {
-            lives=0; // lives--;
+            lives--;
             game_state = 1; // highscore screen
             if (lives < 0) {
                 lives = 0;
