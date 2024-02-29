@@ -342,7 +342,7 @@ void update_bullet(Bullet* bullet);
 ----------------------------------------
 ENEMY LOGIC
 By: Simon Svanberg
-
+built upon the removed enemy array methods by: Isak Erikson Winbäck
 ----------------------------------------
 */
 
